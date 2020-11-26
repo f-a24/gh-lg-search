@@ -1,0 +1,525 @@
+<!DOCTYPE html><html lang="jp"><head><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap"/><meta charSet="utf-8"/><meta name="viewport" content="width=device-width"/><meta name="next-head-count" content="2"/><noscript data-n-css=""></noscript><link rel="preload" href="/_next/static/chunks/main-89692297dc1e16d8104c.js" as="script"/><link rel="preload" href="/_next/static/chunks/webpack-e067438c4cf4ef2ef178.js" as="script"/><link rel="preload" href="/_next/static/chunks/framework.9707fddd9ae5927c17c3.js" as="script"/><link rel="preload" href="/_next/static/chunks/commons.e05666074eb0e541fec7.js" as="script"/><link rel="preload" href="/_next/static/chunks/f6078781a05fe1bcb0902d23dbbb2662c8d200b3.29801878edfe5bab7ffc.js" as="script"/><link rel="preload" href="/_next/static/chunks/71247caf95475e3ea7f9a0f8a30beb258b23d005.b22be4c2b00fc13b2474.js" as="script"/><link rel="preload" href="/_next/static/chunks/pages/_app-8479a75ab4ebc69a12fc.js" as="script"/><link rel="preload" href="/_next/static/chunks/pages/index-9f41b1ad37c94cd927f6.js" as="script"/><style id="jss-server-side">.MuiButtonBase-root {
+  color: inherit;
+  border: 0;
+  cursor: pointer;
+  margin: 0;
+  display: inline-flex;
+  outline: 0;
+  padding: 0;
+  position: relative;
+  align-items: center;
+  user-select: none;
+  border-radius: 0;
+  vertical-align: middle;
+  -moz-appearance: none;
+  justify-content: center;
+  text-decoration: none;
+  background-color: transparent;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.MuiButtonBase-root::-moz-focus-inner {
+  border-style: none;
+}
+.MuiButtonBase-root.Mui-disabled {
+  cursor: default;
+  pointer-events: none;
+}
+@media print {
+  .MuiButtonBase-root {
+    color-adjust: exact;
+  }
+}
+  .MuiButton-root {
+    color: rgba(0, 0, 0, 0.87);
+    padding: 6px 16px;
+    font-size: 0.875rem;
+    min-width: 64px;
+    box-sizing: border-box;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 500;
+    line-height: 1.75;
+    border-radius: 4px;
+    letter-spacing: 0.02857em;
+    text-transform: uppercase;
+  }
+  .MuiButton-root:hover {
+    text-decoration: none;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  .MuiButton-root.Mui-disabled {
+    color: rgba(0, 0, 0, 0.26);
+  }
+@media (hover: none) {
+  .MuiButton-root:hover {
+    background-color: transparent;
+  }
+}
+  .MuiButton-root:hover.Mui-disabled {
+    background-color: transparent;
+  }
+  .MuiButton-label {
+    width: 100%;
+    display: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+  }
+  .MuiButton-text {
+    padding: 6px 8px;
+  }
+  .MuiButton-textPrimary {
+    color: #3f51b5;
+  }
+  .MuiButton-textPrimary:hover {
+    background-color: rgba(63, 81, 181, 0.04);
+  }
+@media (hover: none) {
+  .MuiButton-textPrimary:hover {
+    background-color: transparent;
+  }
+}
+  .MuiButton-textSecondary {
+    color: #f50057;
+  }
+  .MuiButton-textSecondary:hover {
+    background-color: rgba(245, 0, 87, 0.04);
+  }
+@media (hover: none) {
+  .MuiButton-textSecondary:hover {
+    background-color: transparent;
+  }
+}
+  .MuiButton-outlined {
+    border: 1px solid rgba(0, 0, 0, 0.23);
+    padding: 5px 15px;
+  }
+  .MuiButton-outlined.Mui-disabled {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+  .MuiButton-outlinedPrimary {
+    color: #3f51b5;
+    border: 1px solid rgba(63, 81, 181, 0.5);
+  }
+  .MuiButton-outlinedPrimary:hover {
+    border: 1px solid #3f51b5;
+    background-color: rgba(63, 81, 181, 0.04);
+  }
+@media (hover: none) {
+  .MuiButton-outlinedPrimary:hover {
+    background-color: transparent;
+  }
+}
+  .MuiButton-outlinedSecondary {
+    color: #f50057;
+    border: 1px solid rgba(245, 0, 87, 0.5);
+  }
+  .MuiButton-outlinedSecondary:hover {
+    border: 1px solid #f50057;
+    background-color: rgba(245, 0, 87, 0.04);
+  }
+  .MuiButton-outlinedSecondary.Mui-disabled {
+    border: 1px solid rgba(0, 0, 0, 0.26);
+  }
+@media (hover: none) {
+  .MuiButton-outlinedSecondary:hover {
+    background-color: transparent;
+  }
+}
+  .MuiButton-contained {
+    color: rgba(0, 0, 0, 0.87);
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+    background-color: #e0e0e0;
+  }
+  .MuiButton-contained:hover {
+    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+    background-color: #d5d5d5;
+  }
+  .MuiButton-contained.Mui-focusVisible {
+    box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+  }
+  .MuiButton-contained:active {
+    box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+  }
+  .MuiButton-contained.Mui-disabled {
+    color: rgba(0, 0, 0, 0.26);
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0.12);
+  }
+@media (hover: none) {
+  .MuiButton-contained:hover {
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+    background-color: #e0e0e0;
+  }
+}
+  .MuiButton-contained:hover.Mui-disabled {
+    background-color: rgba(0, 0, 0, 0.12);
+  }
+  .MuiButton-containedPrimary {
+    color: #fff;
+    background-color: #3f51b5;
+  }
+  .MuiButton-containedPrimary:hover {
+    background-color: #303f9f;
+  }
+@media (hover: none) {
+  .MuiButton-containedPrimary:hover {
+    background-color: #3f51b5;
+  }
+}
+  .MuiButton-containedSecondary {
+    color: #fff;
+    background-color: #f50057;
+  }
+  .MuiButton-containedSecondary:hover {
+    background-color: #c51162;
+  }
+@media (hover: none) {
+  .MuiButton-containedSecondary:hover {
+    background-color: #f50057;
+  }
+}
+  .MuiButton-disableElevation {
+    box-shadow: none;
+  }
+  .MuiButton-disableElevation:hover {
+    box-shadow: none;
+  }
+  .MuiButton-disableElevation.Mui-focusVisible {
+    box-shadow: none;
+  }
+  .MuiButton-disableElevation:active {
+    box-shadow: none;
+  }
+  .MuiButton-disableElevation.Mui-disabled {
+    box-shadow: none;
+  }
+  .MuiButton-colorInherit {
+    color: inherit;
+    border-color: currentColor;
+  }
+  .MuiButton-textSizeSmall {
+    padding: 4px 5px;
+    font-size: 0.8125rem;
+  }
+  .MuiButton-textSizeLarge {
+    padding: 8px 11px;
+    font-size: 0.9375rem;
+  }
+  .MuiButton-outlinedSizeSmall {
+    padding: 3px 9px;
+    font-size: 0.8125rem;
+  }
+  .MuiButton-outlinedSizeLarge {
+    padding: 7px 21px;
+    font-size: 0.9375rem;
+  }
+  .MuiButton-containedSizeSmall {
+    padding: 4px 10px;
+    font-size: 0.8125rem;
+  }
+  .MuiButton-containedSizeLarge {
+    padding: 8px 22px;
+    font-size: 0.9375rem;
+  }
+  .MuiButton-fullWidth {
+    width: 100%;
+  }
+  .MuiButton-startIcon {
+    display: inherit;
+    margin-left: -4px;
+    margin-right: 8px;
+  }
+  .MuiButton-startIcon.MuiButton-iconSizeSmall {
+    margin-left: -2px;
+  }
+  .MuiButton-endIcon {
+    display: inherit;
+    margin-left: 8px;
+    margin-right: -4px;
+  }
+  .MuiButton-endIcon.MuiButton-iconSizeSmall {
+    margin-right: -2px;
+  }
+  .MuiButton-iconSizeSmall > *:first-child {
+    font-size: 18px;
+  }
+  .MuiButton-iconSizeMedium > *:first-child {
+    font-size: 20px;
+  }
+  .MuiButton-iconSizeLarge > *:first-child {
+    font-size: 22px;
+  }
+@keyframes mui-auto-fill {}
+@keyframes mui-auto-fill-cancel {}
+  .MuiInputBase-root {
+    color: rgba(0, 0, 0, 0.87);
+    cursor: text;
+    display: inline-flex;
+    position: relative;
+    font-size: 1rem;
+    box-sizing: border-box;
+    align-items: center;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1.1876em;
+    letter-spacing: 0.00938em;
+  }
+  .MuiInputBase-root.Mui-disabled {
+    color: rgba(0, 0, 0, 0.38);
+    cursor: default;
+  }
+  .MuiInputBase-multiline {
+    padding: 6px 0 7px;
+  }
+  .MuiInputBase-multiline.MuiInputBase-marginDense {
+    padding-top: 3px;
+  }
+  .MuiInputBase-fullWidth {
+    width: 100%;
+  }
+  .MuiInputBase-input {
+    font: inherit;
+    color: currentColor;
+    width: 100%;
+    border: 0;
+    height: 1.1876em;
+    margin: 0;
+    display: block;
+    padding: 6px 0 7px;
+    min-width: 0;
+    background: none;
+    box-sizing: content-box;
+    animation-name: mui-auto-fill-cancel;
+    letter-spacing: inherit;
+    animation-duration: 10ms;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .MuiInputBase-input::-webkit-input-placeholder {
+    color: currentColor;
+    opacity: 0.42;
+    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+  .MuiInputBase-input::-moz-placeholder {
+    color: currentColor;
+    opacity: 0.42;
+    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+  .MuiInputBase-input:-ms-input-placeholder {
+    color: currentColor;
+    opacity: 0.42;
+    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+  .MuiInputBase-input::-ms-input-placeholder {
+    color: currentColor;
+    opacity: 0.42;
+    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+  .MuiInputBase-input:focus {
+    outline: 0;
+  }
+  .MuiInputBase-input:invalid {
+    box-shadow: none;
+  }
+  .MuiInputBase-input::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  .MuiInputBase-input.Mui-disabled {
+    opacity: 1;
+  }
+  .MuiInputBase-input:-webkit-autofill {
+    animation-name: mui-auto-fill;
+    animation-duration: 5000s;
+  }
+  label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input::-webkit-input-placeholder {
+    opacity: 0 !important;
+  }
+  label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input::-moz-placeholder {
+    opacity: 0 !important;
+  }
+  label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:-ms-input-placeholder {
+    opacity: 0 !important;
+  }
+  label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input::-ms-input-placeholder {
+    opacity: 0 !important;
+  }
+  label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus::-webkit-input-placeholder {
+    opacity: 0.42;
+  }
+  label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus::-moz-placeholder {
+    opacity: 0.42;
+  }
+  label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus:-ms-input-placeholder {
+    opacity: 0.42;
+  }
+  label[data-shrink=false] + .MuiInputBase-formControl .MuiInputBase-input:focus::-ms-input-placeholder {
+    opacity: 0.42;
+  }
+  .MuiInputBase-inputMarginDense {
+    padding-top: 3px;
+  }
+  .MuiInputBase-inputMultiline {
+    height: auto;
+    resize: none;
+    padding: 0;
+  }
+  .MuiInputBase-inputTypeSearch {
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+  }
+  .MuiInput-root {
+    position: relative;
+  }
+  label + .MuiInput-formControl {
+    margin-top: 16px;
+  }
+  .MuiInput-colorSecondary.MuiInput-underline:after {
+    border-bottom-color: #f50057;
+  }
+  .MuiInput-underline:after {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: "";
+    position: absolute;
+    transform: scaleX(0);
+    transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+    border-bottom: 2px solid #3f51b5;
+    pointer-events: none;
+  }
+  .MuiInput-underline.Mui-focused:after {
+    transform: scaleX(1);
+  }
+  .MuiInput-underline.Mui-error:after {
+    transform: scaleX(1);
+    border-bottom-color: #f44336;
+  }
+  .MuiInput-underline:before {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: "\00a0";
+    position: absolute;
+    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+    pointer-events: none;
+  }
+  .MuiInput-underline:hover:not(.Mui-disabled):before {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.87);
+  }
+  .MuiInput-underline.Mui-disabled:before {
+    border-bottom-style: dotted;
+  }
+@media (hover: none) {
+  .MuiInput-underline:hover:not(.Mui-disabled):before {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+  }
+}
+  .MuiFormLabel-root {
+    color: rgba(0, 0, 0, 0.54);
+    padding: 0;
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+  }
+  .MuiFormLabel-root.Mui-focused {
+    color: #3f51b5;
+  }
+  .MuiFormLabel-root.Mui-disabled {
+    color: rgba(0, 0, 0, 0.38);
+  }
+  .MuiFormLabel-root.Mui-error {
+    color: #f44336;
+  }
+  .MuiFormLabel-colorSecondary.Mui-focused {
+    color: #f50057;
+  }
+  .MuiFormLabel-asterisk.Mui-error {
+    color: #f44336;
+  }
+  .MuiInputLabel-root {
+    display: block;
+    transform-origin: top left;
+  }
+  .MuiInputLabel-formControl {
+    top: 0;
+    left: 0;
+    position: absolute;
+    transform: translate(0, 24px) scale(1);
+  }
+  .MuiInputLabel-marginDense {
+    transform: translate(0, 21px) scale(1);
+  }
+  .MuiInputLabel-shrink {
+    transform: translate(0, 1.5px) scale(0.75);
+    transform-origin: top left;
+  }
+  .MuiInputLabel-animated {
+    transition: color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms,transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+  }
+  .MuiInputLabel-filled {
+    z-index: 1;
+    transform: translate(12px, 20px) scale(1);
+    pointer-events: none;
+  }
+  .MuiInputLabel-filled.MuiInputLabel-marginDense {
+    transform: translate(12px, 17px) scale(1);
+  }
+  .MuiInputLabel-filled.MuiInputLabel-shrink {
+    transform: translate(12px, 10px) scale(0.75);
+  }
+  .MuiInputLabel-filled.MuiInputLabel-shrink.MuiInputLabel-marginDense {
+    transform: translate(12px, 7px) scale(0.75);
+  }
+  .MuiInputLabel-outlined {
+    z-index: 1;
+    transform: translate(14px, 20px) scale(1);
+    pointer-events: none;
+  }
+  .MuiInputLabel-outlined.MuiInputLabel-marginDense {
+    transform: translate(14px, 12px) scale(1);
+  }
+  .MuiInputLabel-outlined.MuiInputLabel-shrink {
+    transform: translate(14px, -6px) scale(0.75);
+  }
+  .MuiFormControl-root {
+    border: 0;
+    margin: 0;
+    display: inline-flex;
+    padding: 0;
+    position: relative;
+    min-width: 0;
+    flex-direction: column;
+    vertical-align: top;
+  }
+  .MuiFormControl-marginNormal {
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+  .MuiFormControl-marginDense {
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+  .MuiFormControl-fullWidth {
+    width: 100%;
+  }
+</style><style data-styled="" data-styled-version="5.2.1">html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,menu,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,main,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}/*!sc*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section{display:block;}/*!sc*/
+*[hidden]{display:none;}/*!sc*/
+body{line-height:1;}/*!sc*/
+menu,ol,ul{list-style:none;}/*!sc*/
+blockquote,q{quotes:none;}/*!sc*/
+blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}/*!sc*/
+table{border-collapse:collapse;border-spacing:0;}/*!sc*/
+data-styled.g1[id="sc-global-iZuFCm1"]{content:"sc-global-iZuFCm1,"}/*!sc*/
+html,body{height:100%;background-color:#fff;}/*!sc*/
+#__next{height:100%;}/*!sc*/
+*{box-sizing:border-box;}/*!sc*/
+data-styled.g2[id="sc-global-TNQkN1"]{content:"sc-global-TNQkN1,"}/*!sc*/
+.cIKpxU{width:100%;height:100%;padding:16px;}/*!sc*/
+.cIKpxU > h1{font-size:32px;font-weight:bold;margin-bottom:16px;}/*!sc*/
+.cIKpxU > button{margin-top:16px;}/*!sc*/
+data-styled.g3[id="sc-bdfBwQ"]{content:"cIKpxU,"}/*!sc*/
+</style></head><body><div id="__next"><div class="sc-bdfBwQ cIKpxU"><h1>Language percentage in Github repository</h1><div class="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"><label class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated" data-shrink="false">User Name</label><div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl"><input type="text" aria-invalid="false" value="" class="MuiInputBase-input MuiInput-input"/></div></div><button class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-fullWidth" tabindex="0" type="button"><span class="MuiButton-label">Search</span></button><div class="recharts-responsive-container" style="width:100%;height:80%"><div style="position:absolute;width:0;height:0;visibility:hidden;display:none"></div></div></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"allLang":[{"lang":"1C Enterprise","type":"programming","color":"#814CCC"},{"lang":"ABAP","type":"programming","color":"#E8274B"},{"lang":"AGS Script","type":"programming","color":"#B9D9FF"},{"lang":"AL","type":"programming","color":"#3AA2B5"},{"lang":"AMPL","type":"programming","color":"#E6EFBB"},{"lang":"ANTLR","type":"programming","color":"#9DC3FF"},{"lang":"API Blueprint","type":"markup","color":"#2ACCA8"},{"lang":"APL","type":"programming","color":"#5A8164"},{"lang":"ASP.NET","type":"programming","color":"#9400ff"},{"lang":"ATS","type":"programming","color":"#1ac620"},{"lang":"ActionScript","type":"programming","color":"#882B0F"},{"lang":"Ada","type":"programming","color":"#02f88c"},{"lang":"Agda","type":"programming","color":"#315665"},{"lang":"Alloy","type":"programming","color":"#64C800"},{"lang":"AngelScript","type":"programming","color":"#C7D7DC"},{"lang":"Apex","type":"programming","color":"#1797c0"},{"lang":"Apollo Guidance Computer","type":"programming","color":"#0B3D91"},{"lang":"AppleScript","type":"programming","color":"#101F1F"},{"lang":"Arc","type":"programming","color":"#aa2afe"},{"lang":"AspectJ","type":"programming","color":"#a957b0"},{"lang":"Assembly","type":"programming","color":"#6E4C13"},{"lang":"Asymptote","type":"programming","color":"#ff0000"},{"lang":"AutoHotkey","type":"programming","color":"#6594b9"},{"lang":"AutoIt","type":"programming","color":"#1C3552"},{"lang":"Ballerina","type":"programming","color":"#FF5000"},{"lang":"Batchfile","type":"programming","color":"#C1F12E"},{"lang":"Bison","type":"programming","color":"#6A463F"},{"lang":"Blade","type":"markup","color":"#f7523f"},{"lang":"BlitzMax","type":"programming","color":"#cd6400"},{"lang":"Boo","type":"programming","color":"#d4bec1"},{"lang":"Brainfuck","type":"programming","color":"#2F2530"},{"lang":"C","type":"programming","color":"#555555"},{"lang":"C#","type":"programming","color":"#178600"},{"lang":"C++","type":"programming","color":"#f34b7d"},{"lang":"CSON","type":"data","color":"#244776"},{"lang":"CSS","type":"markup","color":"#563d7c"},{"lang":"Ceylon","type":"programming","color":"#dfa535"},{"lang":"Chapel","type":"programming","color":"#8dc63f"},{"lang":"Cirru","type":"programming","color":"#ccccff"},{"lang":"Clarion","type":"programming","color":"#db901e"},{"lang":"Classic ASP","type":"programming","color":"#6a40fd"},{"lang":"Clean","type":"programming","color":"#3F85AF"},{"lang":"Click","type":"programming","color":"#E4E6F3"},{"lang":"Clojure","type":"programming","color":"#db5855"},{"lang":"CoffeeScript","type":"programming","color":"#244776"},{"lang":"ColdFusion","type":"programming","color":"#ed2cd6"},{"lang":"ColdFusion CFC","type":"programming","color":"#ed2cd6"},{"lang":"Common Lisp","type":"programming","color":"#3fb68b"},{"lang":"Common Workflow Language","type":"programming","color":"#B5314C"},{"lang":"Component Pascal","type":"programming","color":"#B0CE4E"},{"lang":"Crystal","type":"programming","color":"#000100"},{"lang":"Cuda","type":"programming","color":"#3A4E3A"},{"lang":"D","type":"programming","color":"#ba595e"},{"lang":"DM","type":"programming","color":"#447265"},{"lang":"Dafny","type":"programming","color":"#FFEC25"},{"lang":"Dart","type":"programming","color":"#00B4AB"},{"lang":"DataWeave","type":"programming","color":"#003a52"},{"lang":"Dhall","type":"programming","color":"#dfafff"},{"lang":"Dockerfile","type":"programming","color":"#384d54"},{"lang":"Dogescript","type":"programming","color":"#cca760"},{"lang":"Dylan","type":"programming","color":"#6c616e"},{"lang":"E","type":"programming","color":"#ccce35"},{"lang":"ECL","type":"programming","color":"#8a1267"},{"lang":"EJS","type":"markup","color":"#a91e50"},{"lang":"EQ","type":"programming","color":"#a78649"},{"lang":"Eiffel","type":"programming","color":"#4d6977"},{"lang":"Elixir","type":"programming","color":"#6e4a7e"},{"lang":"Elm","type":"programming","color":"#60B5CC"},{"lang":"Emacs Lisp","type":"programming","color":"#c065db"},{"lang":"EmberScript","type":"programming","color":"#FFF4F3"},{"lang":"Erlang","type":"programming","color":"#B83998"},{"lang":"F#","type":"programming","color":"#b845fc"},{"lang":"F*","type":"programming","color":"#572e30"},{"lang":"FLUX","type":"programming","color":"#88ccff"},{"lang":"Factor","type":"programming","color":"#636746"},{"lang":"Fancy","type":"programming","color":"#7b9db4"},{"lang":"Fantom","type":"programming","color":"#14253c"},{"lang":"Faust","type":"programming","color":"#c37240"},{"lang":"Forth","type":"programming","color":"#341708"},{"lang":"Fortran","type":"programming","color":"#4d41b1"},{"lang":"FreeMarker","type":"programming","color":"#0050b2"},{"lang":"Frege","type":"programming","color":"#00cafe"},{"lang":"Futhark","type":"programming","color":"#5f021f"},{"lang":"G-code","type":"programming","color":"#D08CF2"},{"lang":"GAML","type":"programming","color":"#FFC766"},{"lang":"GDScript","type":"programming","color":"#355570"},{"lang":"Game Maker Language","type":"programming","color":"#71b417"},{"lang":"Genie","type":"programming","color":"#fb855d"},{"lang":"Gherkin","type":"programming","color":"#5B2063"},{"lang":"Glyph","type":"programming","color":"#c1ac7f"},{"lang":"Gnuplot","type":"programming","color":"#f0a9f0"},{"lang":"Go","type":"programming","color":"#00ADD8"},{"lang":"Golo","type":"programming","color":"#88562A"},{"lang":"Gosu","type":"programming","color":"#82937f"},{"lang":"Grammatical Framework","type":"programming","color":"#ff0000"},{"lang":"GraphQL","type":"data","color":"#e10098"},{"lang":"Groovy","type":"programming","color":"#e69f56"},{"lang":"HTML","type":"markup","color":"#e34c26"},{"lang":"Hack","type":"programming","color":"#878787"},{"lang":"Haml","type":"markup","color":"#ece2a9"},{"lang":"Handlebars","type":"markup","color":"#f7931e"},{"lang":"Harbour","type":"programming","color":"#0e60e3"},{"lang":"Haskell","type":"programming","color":"#5e5086"},{"lang":"Haxe","type":"programming","color":"#df7900"},{"lang":"HiveQL","type":"programming","color":"#dce200"},{"lang":"HolyC","type":"programming","color":"#ffefaf"},{"lang":"Hy","type":"programming","color":"#7790B2"},{"lang":"IDL","type":"programming","color":"#a3522f"},{"lang":"IGOR Pro","type":"programming","color":"#0000cc"},{"lang":"Idris","type":"programming","color":"#b30000"},{"lang":"Io","type":"programming","color":"#a9188d"},{"lang":"Ioke","type":"programming","color":"#078193"},{"lang":"Isabelle","type":"programming","color":"#FEFE00"},{"lang":"J","type":"programming","color":"#9EEDFF"},{"lang":"JFlex","type":"programming","color":"#DBCA00"},{"lang":"JSONiq","type":"programming","color":"#40d47e"},{"lang":"Java","type":"programming","color":"#b07219"},{"lang":"JavaScript","type":"programming","color":"#f1e05a"},{"lang":"Jolie","type":"programming","color":"#843179"},{"lang":"Jsonnet","type":"programming","color":"#0064bd"},{"lang":"Julia","type":"programming","color":"#a270ba"},{"lang":"Jupyter Notebook","type":"markup","color":"#DA5B0B"},{"lang":"KRL","type":"programming","color":"#28430A"},{"lang":"Kaitai Struct","type":"programming","color":"#773b37"},{"lang":"Kotlin","type":"programming","color":"#F18E33"},{"lang":"LFE","type":"programming","color":"#4C3023"},{"lang":"LLVM","type":"programming","color":"#185619"},{"lang":"LOLCODE","type":"programming","color":"#cc9900"},{"lang":"LSL","type":"programming","color":"#3d9970"},{"lang":"Lark","type":"data","color":"#0b130f"},{"lang":"Lasso","type":"programming","color":"#999999"},{"lang":"Latte","type":"markup","color":"#f2a542"},{"lang":"Less","type":"markup","color":"#1d365d"},{"lang":"Lex","type":"programming","color":"#DBCA00"},{"lang":"LiveScript","type":"programming","color":"#499886"},{"lang":"LookML","type":"programming","color":"#652B81"},{"lang":"Lua","type":"programming","color":"#000080"},{"lang":"MATLAB","type":"programming","color":"#e16737"},{"lang":"MAXScript","type":"programming","color":"#00a6a6"},{"lang":"MLIR","type":"programming","color":"#5EC8DB"},{"lang":"MQL4","type":"programming","color":"#62A8D6"},{"lang":"MQL5","type":"programming","color":"#4A76B8"},{"lang":"MTML","type":"markup","color":"#b7e1f4"},{"lang":"Macaulay2","type":"programming","color":"#d8ffff"},{"lang":"Makefile","type":"programming","color":"#427819"},{"lang":"Markdown","type":"prose","color":"#083fa1"},{"lang":"Marko","type":"markup","color":"#42bff2"},{"lang":"Mask","type":"markup","color":"#f97732"},{"lang":"Max","type":"programming","color":"#c4a79c"},{"lang":"Mercury","type":"programming","color":"#ff2b2b"},{"lang":"Meson","type":"programming","color":"#007800"},{"lang":"Metal","type":"programming","color":"#8f14e9"},{"lang":"Mirah","type":"programming","color":"#c7a938"},{"lang":"Modula-3","type":"programming","color":"#223388"},{"lang":"NCL","type":"programming","color":"#28431f"},{"lang":"NWScript","type":"programming","color":"#111522"},{"lang":"Nearley","type":"programming","color":"#990000"},{"lang":"Nemerle","type":"programming","color":"#3d3c6e"},{"lang":"NetLinx","type":"programming","color":"#0aa0ff"},{"lang":"NetLinx+ERB","type":"programming","color":"#747faa"},{"lang":"NetLogo","type":"programming","color":"#ff6375"},{"lang":"NewLisp","type":"programming","color":"#87AED7"},{"lang":"Nextflow","type":"programming","color":"#3ac486"},{"lang":"Nim","type":"programming","color":"#ffc200"},{"lang":"Nit","type":"programming","color":"#009917"},{"lang":"Nix","type":"programming","color":"#7e7eff"},{"lang":"Nu","type":"programming","color":"#c9df40"},{"lang":"NumPy","type":"programming","color":"#9C8AF9"},{"lang":"OCaml","type":"programming","color":"#3be133"},{"lang":"ObjectScript","type":"programming","color":"#424893"},{"lang":"Objective-C","type":"programming","color":"#438eff"},{"lang":"Objective-C++","type":"programming","color":"#6866fb"},{"lang":"Objective-J","type":"programming","color":"#ff0c5a"},{"lang":"Odin","type":"programming","color":"#60AFFE"},{"lang":"Omgrofl","type":"programming","color":"#cabbff"},{"lang":"Opal","type":"programming","color":"#f7ede0"},{"lang":"OpenQASM","type":"programming","color":"#AA70FF"},{"lang":"Oxygene","type":"programming","color":"#cdd0e3"},{"lang":"Oz","type":"programming","color":"#fab738"},{"lang":"P4","type":"programming","color":"#7055b5"},{"lang":"PHP","type":"programming","color":"#4F5D95"},{"lang":"PLSQL","type":"programming","color":"#dad8d8"},{"lang":"Pan","type":"programming","color":"#cc0000"},{"lang":"Papyrus","type":"programming","color":"#6600cc"},{"lang":"Parrot","type":"programming","color":"#f3ca0a"},{"lang":"Pascal","type":"programming","color":"#E3F171"},{"lang":"Pawn","type":"programming","color":"#dbb284"},{"lang":"Pep8","type":"programming","color":"#C76F5B"},{"lang":"Perl","type":"programming","color":"#0298c3"},{"lang":"PigLatin","type":"programming","color":"#fcd7de"},{"lang":"Pike","type":"programming","color":"#005390"},{"lang":"PogoScript","type":"programming","color":"#d80074"},{"lang":"PostScript","type":"markup","color":"#da291c"},{"lang":"PowerBuilder","type":"programming","color":"#8f0f8d"},{"lang":"PowerShell","type":"programming","color":"#012456"},{"lang":"Prisma","type":"data","color":"#0c344b"},{"lang":"Processing","type":"programming","color":"#0096D8"},{"lang":"Prolog","type":"programming","color":"#74283c"},{"lang":"Propeller Spin","type":"programming","color":"#7fa2a7"},{"lang":"Pug","type":"markup","color":"#a86454"},{"lang":"Puppet","type":"programming","color":"#302B6D"},{"lang":"PureBasic","type":"programming","color":"#5a6986"},{"lang":"PureScript","type":"programming","color":"#1D222D"},{"lang":"Python","type":"programming","color":"#3572A5"},{"lang":"Q#","type":"programming","color":"#fed659"},{"lang":"QML","type":"programming","color":"#44a51c"},{"lang":"Qt Script","type":"programming","color":"#00b841"},{"lang":"Quake","type":"programming","color":"#882233"},{"lang":"R","type":"programming","color":"#198CE7"},{"lang":"RAML","type":"markup","color":"#77d9fb"},{"lang":"RUNOFF","type":"markup","color":"#665a4e"},{"lang":"Racket","type":"programming","color":"#3c5caa"},{"lang":"Ragel","type":"programming","color":"#9d5200"},{"lang":"Raku","type":"programming","color":"#0000fb"},{"lang":"Rascal","type":"programming","color":"#fffaa0"},{"lang":"ReScript","type":"programming","color":"#ed5051"},{"lang":"Reason","type":"programming","color":"#ff5847"},{"lang":"Rebol","type":"programming","color":"#358a5b"},{"lang":"Red","type":"programming","color":"#f50000"},{"lang":"Ren'Py","type":"programming","color":"#ff7f7f"},{"lang":"Ring","type":"programming","color":"#2D54CB"},{"lang":"Riot","type":"markup","color":"#A71E49"},{"lang":"Roff","type":"markup","color":"#ecdebe"},{"lang":"Rouge","type":"programming","color":"#cc0088"},{"lang":"Ruby","type":"programming","color":"#701516"},{"lang":"Rust","type":"programming","color":"#dea584"},{"lang":"SAS","type":"programming","color":"#B34936"},{"lang":"SCSS","type":"markup","color":"#c6538c"},{"lang":"SQF","type":"programming","color":"#3F3F3F"},{"lang":"SRecode Template","type":"markup","color":"#348a34"},{"lang":"SVG","type":"data","color":"#ff9900"},{"lang":"SaltStack","type":"programming","color":"#646464"},{"lang":"Sass","type":"markup","color":"#a53b70"},{"lang":"Scala","type":"programming","color":"#c22d40"},{"lang":"Scheme","type":"programming","color":"#1e4aec"},{"lang":"Self","type":"programming","color":"#0579aa"},{"lang":"Shell","type":"programming","color":"#89e051"},{"lang":"Shen","type":"programming","color":"#120F14"},{"lang":"Slash","type":"programming","color":"#007eff"},{"lang":"Slice","type":"programming","color":"#003fa2"},{"lang":"Slim","type":"markup","color":"#2b2b2b"},{"lang":"SmPL","type":"programming","color":"#c94949"},{"lang":"Smalltalk","type":"programming","color":"#596706"},{"lang":"Solidity","type":"programming","color":"#AA6746"},{"lang":"SourcePawn","type":"programming","color":"#f69e1d"},{"lang":"Squirrel","type":"programming","color":"#800000"},{"lang":"Stan","type":"programming","color":"#b2011d"},{"lang":"Standard ML","type":"programming","color":"#dc566d"},{"lang":"Starlark","type":"programming","color":"#76d275"},{"lang":"Stylus","type":"markup","color":"#ff6347"},{"lang":"SuperCollider","type":"programming","color":"#46390b"},{"lang":"Svelte","type":"markup","color":"#ff3e00"},{"lang":"Swift","type":"programming","color":"#ffac45"},{"lang":"SystemVerilog","type":"programming","color":"#DAE1C2"},{"lang":"TI Program","type":"programming","color":"#A0AA87"},{"lang":"Tcl","type":"programming","color":"#e4cc98"},{"lang":"TeX","type":"markup","color":"#3D6117"},{"lang":"Terra","type":"programming","color":"#00004c"},{"lang":"Turing","type":"programming","color":"#cf142b"},{"lang":"Twig","type":"markup","color":"#c1d026"},{"lang":"TypeScript","type":"programming","color":"#2b7489"},{"lang":"Unified Parallel C","type":"programming","color":"#4e3617"},{"lang":"Uno","type":"programming","color":"#9933cc"},{"lang":"UnrealScript","type":"programming","color":"#a54c4d"},{"lang":"V","type":"programming","color":"#4f87c4"},{"lang":"VBA","type":"programming","color":"#867db1"},{"lang":"VBScript","type":"programming","color":"#15dcdc"},{"lang":"VCL","type":"programming","color":"#148AA8"},{"lang":"VHDL","type":"programming","color":"#adb2cb"},{"lang":"Vala","type":"programming","color":"#fbe5cd"},{"lang":"Verilog","type":"programming","color":"#b2b7f8"},{"lang":"Vim script","type":"programming","color":"#199f4b"},{"lang":"Visual Basic .NET","type":"programming","color":"#945db7"},{"lang":"Volt","type":"programming","color":"#1F1F1F"},{"lang":"Vue","type":"markup","color":"#2c3e50"},{"lang":"WebAssembly","type":"programming","color":"#04133b"},{"lang":"Wollok","type":"programming","color":"#a23738"},{"lang":"X10","type":"programming","color":"#4B6BEF"},{"lang":"XC","type":"programming","color":"#99DA07"},{"lang":"XQuery","type":"programming","color":"#5232e7"},{"lang":"XSLT","type":"programming","color":"#EB8CEB"},{"lang":"YAML","type":"data","color":"#cb171e"},{"lang":"YARA","type":"programming","color":"#220000"},{"lang":"YASnippet","type":"markup","color":"#32AB90"},{"lang":"Yacc","type":"programming","color":"#4B6C4B"},{"lang":"ZAP","type":"programming","color":"#0d665e"},{"lang":"ZIL","type":"programming","color":"#dc75e5"},{"lang":"ZenScript","type":"programming","color":"#00BCD1"},{"lang":"Zephir","type":"programming","color":"#118f9e"},{"lang":"Zig","type":"programming","color":"#ec915c"},{"lang":"eC","type":"programming","color":"#913960"},{"lang":"mIRC Script","type":"programming","color":"#3d57c3"},{"lang":"mcfunction","type":"programming","color":"#E22837"},{"lang":"nesC","type":"programming","color":"#94B0C7"},{"lang":"ooc","type":"programming","color":"#b0b77e"},{"lang":"q","type":"programming","color":"#0040cd"},{"lang":"sed","type":"programming","color":"#64b970"},{"lang":"wdl","type":"programming","color":"#42f1f4"},{"lang":"wisp","type":"programming","color":"#7582D1"},{"lang":"xBase","type":"programming","color":"#403a40"}]},"__N_SSG":true},"page":"/","query":{},"buildId":"wotqrpoOQz43NdScfMfdV","nextExport":false,"isFallback":false,"gsp":true}</script><script nomodule="" src="/_next/static/chunks/polyfills-11c8eba6a84e3fddec04.js"></script><script src="/_next/static/chunks/main-89692297dc1e16d8104c.js" async=""></script><script src="/_next/static/chunks/webpack-e067438c4cf4ef2ef178.js" async=""></script><script src="/_next/static/chunks/framework.9707fddd9ae5927c17c3.js" async=""></script><script src="/_next/static/chunks/commons.e05666074eb0e541fec7.js" async=""></script><script src="/_next/static/chunks/f6078781a05fe1bcb0902d23dbbb2662c8d200b3.29801878edfe5bab7ffc.js" async=""></script><script src="/_next/static/chunks/71247caf95475e3ea7f9a0f8a30beb258b23d005.b22be4c2b00fc13b2474.js" async=""></script><script src="/_next/static/chunks/pages/_app-8479a75ab4ebc69a12fc.js" async=""></script><script src="/_next/static/chunks/pages/index-9f41b1ad37c94cd927f6.js" async=""></script><script src="/_next/static/wotqrpoOQz43NdScfMfdV/_buildManifest.js" async=""></script><script src="/_next/static/wotqrpoOQz43NdScfMfdV/_ssgManifest.js" async=""></script></body></html>
