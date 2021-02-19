@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NextPage } from 'next';
 import styled from 'styled-components';
-import { safeLoad } from 'js-yaml';
+import { load } from 'js-yaml';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
@@ -179,14 +179,12 @@ export async function getStaticProps() {
     'https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml'
   );
   const allLanguageYml = await res.text();
-  const allLanguageObj = safeLoad(allLanguageYml);
-  const allLang = Object.keys(allLanguageObj)
-    .filter(k => allLanguageObj[k].color)
-    .map(key => ({
-      lang: key,
-      type: allLanguageObj[key].type,
-      color: allLanguageObj[key].color
-    }));
+  const allLanguageObj = load(allLanguageYml);
+  const allLang = Object.keys(allLanguageObj).map(key => ({
+    lang: key,
+    type: allLanguageObj[key].type,
+    color: allLanguageObj[key].color || '#ccc'
+  }));
   return {
     props: {
       allLang
