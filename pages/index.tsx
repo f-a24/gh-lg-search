@@ -3,6 +3,8 @@ import { NextPage } from 'next';
 import styled from 'styled-components';
 import { load } from 'js-yaml';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 
@@ -21,6 +23,7 @@ type LanguageType = {
 }[];
 
 type UserDataType = {
+  loading: boolean,
   avatar: string;
   bio: string;
   login: string;
@@ -31,16 +34,19 @@ type UserDataType = {
 const App: NextPage<PropsType> = ({ allLang }) => {
   const [userName, setUserName] = React.useState('');
   const [userData, setUserData] = React.useState<UserDataType>({
+    loading: false,
     avatar: '',
     bio: '',
     login: '',
     name: '',
     lang: []
   });
+ 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value);
   };
   const clickHandler = async () => {
+    setUserData({ ...userData, loading: true });
     const langsArray: string[] = [];
     const userUrl = `https://api.github.com/users/${encodeURI(userName)}`;
     const userRes = await fetch(userUrl);
@@ -65,6 +71,7 @@ const App: NextPage<PropsType> = ({ allLang }) => {
     }
     const langNames = [...new Set(langsArray)];
     setUserData({
+      loading: false,
       avatar: avatar_url,
       bio,
       login,
@@ -76,6 +83,7 @@ const App: NextPage<PropsType> = ({ allLang }) => {
       }))
     });
   };
+
   return (
     <>
       <InputBlock>
@@ -84,6 +92,12 @@ const App: NextPage<PropsType> = ({ allLang }) => {
           label="User Name"
           value={userName}
           onChange={inputHandler}
+          onKeyPress={e => {
+            if (e.key == 'Enter') {
+              e.preventDefault();
+              clickHandler();
+            }
+          }}
           variant="outlined"
           fullWidth
         />
@@ -120,6 +134,9 @@ const App: NextPage<PropsType> = ({ allLang }) => {
           </ChartBlock>
         </DataBlock>
       )}
+      <ProgressDialog fullScreen open={userData.loading}>
+        <CircularProgress />
+      </ProgressDialog>
     </>
   );
 };
@@ -172,6 +189,20 @@ const ChartBlock = styled.div`
   padding: 16px;
   margin: 16px;
   background-color: #0d1117;
+`;
+
+const ProgressDialog = styled(Dialog)`
+  z-index: 1000 !important;
+  > div {
+    background-color: rgba(255, 255, 255, 0.2);
+    > div {
+      position: absolute;
+      top: calc(50% - 20px);
+      left: calc(50% - 20px);
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
 `;
 
 export async function getStaticProps() {
