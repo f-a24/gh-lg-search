@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
-import { Cell, Pie, PieChart, Tooltip } from 'recharts';
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 type PropsType = {
   allLang: {
@@ -23,7 +23,7 @@ type LanguageType = {
 }[];
 
 type UserDataType = {
-  loading: boolean,
+  loading: boolean;
   avatar: string;
   bio: string;
   login: string;
@@ -41,7 +41,7 @@ const App: NextPage<PropsType> = ({ allLang }) => {
     name: '',
     lang: []
   });
- 
+
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value);
   };
@@ -119,18 +119,20 @@ const App: NextPage<PropsType> = ({ allLang }) => {
             <p>{userData.bio}</p>
           </UserBlock>
           <ChartBlock>
-            <PieChart width={600} height={600}>
-              <Pie
-                dataKey="value"
-                data={userData.lang}
-                label={({ name }) => name}
-              >
-                {userData.lang.map(({ color }) => (
-                  <Cell key={`${Math.random()}`} fill={color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  dataKey="value"
+                  data={userData.lang}
+                  label={({ name }) => name}
+                >
+                  {userData.lang.map(({ color }) => (
+                    <Cell key={`${Math.random()}`} fill={color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           </ChartBlock>
         </DataBlock>
       )}
@@ -155,6 +157,7 @@ const InputBlock = styled.div`
 
 const DataBlock = styled.div`
   display: flex;
+  height: calc(100% - 200px);
 `;
 
 const UserBlock = styled.div`
