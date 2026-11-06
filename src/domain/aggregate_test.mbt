@@ -98,8 +98,13 @@ test "同数の言語は長さではなく名前の昇順に並ぶ" {
 
 ///|
 test "集計結果に言語の色が入る" {
-  let stats = @domain.aggregate([repo("a", "Unknown", 2020)])
-  assert_eq(stats[0].color, "#cccccc")
+  let stats = @domain.aggregate([
+    repo("a", "TypeScript", 2020),
+    repo("b", "TypeScript", 2021),
+    repo("c", "Unknown", 2020),
+  ])
+  assert_eq(stats[0].color, "#3178c6")
+  assert_eq(stats[1].color, "#cccccc")
 }
 
 ///|

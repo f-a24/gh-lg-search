@@ -1,0 +1,199 @@
+---
+import {
+  "moonbitlang/core/env",
+  "moonbitlang/x/fs",
+}
+---
+
+// GitHub Linguist の languages.yml から src/linguist/colors_generated.mbt を生成する。
+//
+// 使い方（moon.mod のあるディレクトリで実行する）:
+//   curl -fsSL -o <保存先>/languages.yml https://raw.githubusercontent.com/github-linguist/linguist/<タグ>/lib/linguist/languages.yml
+//   moon run tools/gen_linguist.mbtx <保存先>/languages.yml <タグ>
+//   moon fmt
+//
+// テスト: moon test tools/gen_linguist.mbtx
+//
+// languages.yml 全体を解釈する YAML パーサーは持たず、必要な行だけを読む。
+// 想定と違う書式を見つけたら、色を黙って取りこぼさないように失敗させる。
+
+///|
+const OUTPUT_PATH : String = "src/linguist/colors_generated.mbt"
+
+///|
+const COLOR_PREFIX : String = "  color: "
+
+///|
+fn is_hex_digit(c : UInt16) -> Bool {
+  c is ('0'..<='9' | 'a'..<='f' | 'A'..<='F')
+}
+
+///|
+/// `"#rrggbb"`（引用符つき）から `#rrggbb` を取り出す。大文字小文字は元のまま残す。
+fn parse_color(value : StringView) -> String? {
+  guard value.length() == 9 && value[0] == '"' && value[8] == '"' else {
+    return None
+  }
+  let color = value[1:8]
+  guard color[0] == '#' else { return None }
+  for i in 1..<7 {
+    guard is_hex_digit(color[i]) else { return None }
+  }
+  Some(color.to_owned())
+}
+
+///|
+/// 言語名を MoonBit の文字列リテラルにそのまま埋め込めるか確かめる。
+fn is_plain_name(name : StringView) -> Bool {
+  name.length() > 0 && !name.contains("\"") && !name.contains("\\")
+}
+
+///|
+/// languages.yml の本文から、色を持つ言語の `(言語名, 色)` を出現順に返す。
+fn parse_colors(yml : String) -> Array[(String, String)] raise {
+  let entries : Array[(String, String)] = []
+  let mut current : String? = None
+  let mut has_color = false
+  for raw in yml.split("\n") {
+    let line = raw.trim_end(chars="\r")
+    if line.length() == 0 || line[0] == '#' || line == "---" {
+      continue
+    }
+    if line[0] == ' ' || line[0] == '-' {
+      if line.strip_prefix(COLOR_PREFIX) is Some(value) {
+        guard current is Some(name) else {
+          fail("言語の外に color があります: \{line}")
+        }
+        guard !has_color else { fail("\{name} の color が重複しています") }
+        guard parse_color(value) is Some(color) else {
+          fail("\{name} の color の書式が想定外です: \{value}")
+        }
+        entries.push((name, color))
+        has_color = true
+      }
+      continue
+    }
+    guard line.strip_suffix(":") is Some(name) && is_plain_name(name) else {
+      fail("トップレベルの行の書式が想定外です: \{line}")
+    }
+    current = Some(name.to_owned())
+    has_color = false
+  }
+  entries
+}
+
+///|
+fn render(entries : Array[(String, String)], tag : String) -> String {
+  let out = StringBuilder()
+  out <+ "// 生成ファイル。手で編集しない。\n"
+  out <+ "// 生成元: github-linguist/linguist \{tag} の lib/linguist/languages.yml\n"
+  out <+ "// 再生成の手順は tools/gen_linguist.mbtx の先頭を参照。\n"
+  out <+ "\n"
+  out <+ "///|\n"
+  out <+ "/// Linguist に色が定義されている言語なら、その色を返す。\n"
+  out <+ "fn lookup_color(language : String) -> String? {\n"
+  out <+ "  match language {\n"
+  for entry in entries {
+    let (name, color) = entry
+    out <+ "    \"\{name}\" => Some(\"\{color}\")\n"
+  }
+  out <+ "    _ => None\n"
+  out <+ "  }\n"
+  out <+ "}\n"
+  out.to_string()
+}
+
+///|
+fn main raise {
+  let args = @env.args()
+  guard args.length() == 3 else {
+    fail("使い方: moon run tools/gen_linguist.mbtx <languages.yml> <タグ>")
+  }
+  let entries = parse_colors(@fs.read_file_to_string(args[1]))
+  guard entries.length() > 0 else { fail("色が1件も見つかりませんでした") }
+  @fs.write_string_to_file(OUTPUT_PATH, render(entries, args[2]))
+  println("\{OUTPUT_PATH} に \{entries.length()} 言語を書き出しました")
+}
+
+///|
+test "色のある言語だけを、大文字小文字を保って出現順に返す" {
+  let yml =
+    #|# コメント
+    #|---
+    #|Cap'n Proto:
+    #|  type: programming
+    #|  color: "#c42727"
+    #|  extensions:
+    #|  - ".capnp"
+    #|ABNF:
+    #|  type: data
+    #|  ace_mode: text
+    #|Jupyter Notebook:
+    #|  color: "#DA5B0B"
+    #|
+  debug_inspect(
+    parse_colors(yml),
+    content=(
+      #|[("Cap'n Proto", "#c42727"), ("Jupyter Notebook", "#DA5B0B")]
+    ),
+  )
+}
+
+///|
+test "改行が CRLF でも読める" {
+  debug_inspect(
+    parse_colors("Elm:\r\n  color: \"#60B5CC\"\r\n"),
+    content=(
+      #|[("Elm", "#60B5CC")]
+    ),
+  )
+}
+
+///|
+test "入れ子の color は言語の色として扱わない" {
+  debug_inspect(
+    parse_colors("Elm:\n  nested:\n    color: \"#000000\"\n"),
+    content="[]",
+  )
+}
+
+///|
+test "想定外の書式は失敗する" {
+  for yml in [
+    "Elm:\n  color: red\n",
+    "Elm:\n  color: \"#12345\"\n",
+    "Elm:\n  color: \"#12345g\"\n",
+    "Elm:\n  color: \"#111111\"\n  color: \"#222222\"\n",
+    "  color: \"#111111\"\n",
+    "\"Quoted\":\n  color: \"#111111\"\n",
+    "not a key\n",
+  ] {
+    try parse_colors(yml) catch {
+      _ => ()
+    } noraise {
+      _ => fail("失敗するはずの入力が通りました: \{yml}")
+    }
+  }
+}
+
+///|
+test "生成するコードの形" {
+  inspect(
+    render([("Elm", "#60B5CC")], "v0.0.0"),
+    content=(
+      #|// 生成ファイル。手で編集しない。
+      #|// 生成元: github-linguist/linguist v0.0.0 の lib/linguist/languages.yml
+      #|// 再生成の手順は tools/gen_linguist.mbtx の先頭を参照。
+      #|
+      #|///|
+      #|/// Linguist に色が定義されている言語なら、その色を返す。
+      #|fn lookup_color(language : String) -> String? {
+      #|  match language {
+      #|    "Elm" => Some("#60B5CC")
+      #|    _ => None
+      #|  }
+      #|}
+      #|
+    ),
+  )
+}

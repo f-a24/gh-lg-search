@@ -5,7 +5,15 @@ pub let default_color : String = "#cccccc"
 ///|
 /// 言語名から `#rrggbb` 形式の色を返す。
 ///
-/// 色の表は T1-2 で生成する。それまではすべての言語に `default_color` を返す。
-pub fn color_of(_language : String) -> String {
-  default_color
+/// 色は Linguist の `languages.yml` の表記のまま返す（大文字の16進数もある）。
+/// 言語名は完全一致で引く。
+///
+/// ```mbt check
+/// test {
+///   inspect(@linguist.color_of("TypeScript"), content="#3178c6")
+///   inspect(@linguist.color_of("未知の言語"), content="#cccccc")
+/// }
+/// ```
+pub fn color_of(language : String) -> String {
+  lookup_color(language).unwrap_or(default_color)
 }
