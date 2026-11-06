@@ -2,10 +2,52 @@
 package "f-a24/gh-lg-search/src/ffi"
 
 // Values
+pub fn cancel_animation_frame(Int32) -> Unit
+
+pub fn device_pixel_ratio() -> Double
+
+pub fn find_canvas(String) -> Canvas?
+
+pub fn performance_now() -> Double
+
+pub fn prefers_reduced_motion() -> Bool
+
+pub fn request_animation_frame((Double) -> Unit) -> Int32
 
 // Errors
 
 // Types and methods
+#external
+pub type Canvas
+pub fn Canvas::client_width(Self) -> Double
+pub fn Canvas::context_2d(Self) -> Context2d?
+
+#external
+pub type Context2d
+pub fn Context2d::arc(Self, Double, Double, Double, Double, Double) -> Unit
+pub fn Context2d::begin_path(Self) -> Unit
+pub fn Context2d::create_radial_gradient(Self, Double, Double, Double, Double, Double, Double) -> Gradient
+pub fn Context2d::ellipse(Self, Double, Double, Double, Double, Double, Double, Double) -> Unit
+pub fn Context2d::fill(Self) -> Unit
+pub fn Context2d::fill_rect(Self, Double, Double, Double, Double) -> Unit
+pub fn Context2d::fill_text(Self, String, Double, Double) -> Unit
+pub fn Context2d::fit_canvas(Self, Double, Double, Double) -> Unit
+pub fn Context2d::measure_text(Self, String) -> Double
+pub fn Context2d::restore(Self) -> Unit
+pub fn Context2d::rotate(Self, Double) -> Unit
+pub fn Context2d::save(Self) -> Unit
+pub fn Context2d::set_fill_color(Self, String) -> Unit
+pub fn Context2d::set_fill_gradient(Self, Gradient) -> Unit
+pub fn Context2d::set_font(Self, String) -> Unit
+pub fn Context2d::set_line_width(Self, Double) -> Unit
+pub fn Context2d::set_stroke_color(Self, String) -> Unit
+pub fn Context2d::set_text_align(Self, String) -> Unit
+pub fn Context2d::stroke(Self) -> Unit
+pub fn Context2d::translate(Self, Double, Double) -> Unit
+
+#external
+pub type Gradient
+pub fn Gradient::add_color_stop(Self, Double, String) -> Unit
 
 // Type aliases
 
