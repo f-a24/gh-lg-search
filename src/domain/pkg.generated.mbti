@@ -8,6 +8,8 @@ import {
 // Values
 pub fn aggregate(Array[Repo]) -> Array[LanguageStat]
 
+pub fn compare_names(String, String) -> Int32
+
 pub fn filter_countable(Array[RawRepo]) -> Array[Repo]
 
 pub fn parse_created_year(String) -> Int32?

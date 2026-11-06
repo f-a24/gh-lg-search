@@ -43,6 +43,7 @@ pub fn System::equal(Self, Self) -> Bool
 pub fn System::label_baseline(Self, Canvas) -> Double
 pub fn System::label_width(Self, Canvas) -> Double
 pub fn System::not_equal(Self, Self) -> Bool
+pub fn System::orbit_radius(Self, Int32, Canvas) -> Double
 pub fn System::to_repr(Self) -> @debug.Repr
 
 // Type aliases

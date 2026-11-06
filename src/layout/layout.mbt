@@ -124,6 +124,18 @@ pub fn System::label_baseline(self : System, canvas : Canvas) -> Double {
 }
 
 ///|
+/// 内側から `index` 番目（0 始まり）の軌道の半径を返す。
+pub fn System::orbit_radius(
+  self : System,
+  index : Int32,
+  canvas : Canvas,
+) -> Double {
+  self.star_radius +
+  FIRST_ORBIT_GAP * canvas.scale() +
+  index.to_double() * self.orbit_step
+}
+
+///|
 /// 位置が決まる前の惑星系を作る。
 fn new_system(
   stat : @domain.LanguageStat,

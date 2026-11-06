@@ -1,1 +1,22 @@
+import {
+  "f-a24/gh-lg-search/src/domain",
+  "f-a24/gh-lg-search/src/layout",
+  "moonbitlang/core/cmp",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/math",
+}
 
+import {
+  "moonbitlang/core/json",
+} for "test"
+
+rule(
+  name: "embed-fixture",
+  command: ":embed -i $input -o $output --name f_a24_repos_json --text",
+)
+
+dev_build(
+  rule: "embed-fixture",
+  input: "../../fixtures/f-a24-repos.json",
+  output: "fixture_data_test.mbt",
+)

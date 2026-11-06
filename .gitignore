@@ -6,3 +6,4 @@ target
 .repos
 dist
 src/domain/fixture_data_test.mbt
+src/orbit/fixture_data_test.mbt

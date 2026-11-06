@@ -43,7 +43,14 @@ pub fn filter_countable(repos : Array[RawRepo]) -> Array[Repo] {
 /// 文字列を UTF-16 コード単位の辞書順で比べる。
 ///
 /// `String::compare` は長さを先に比べるため、名前の昇順には使えない。
-fn compare_names(a : String, b : String) -> Int32 {
+///
+/// ```mbt check
+/// test {
+///   assert_true(@domain.compare_names("Haskell", "Rust") < 0)
+///   assert_true(@domain.compare_names("Rust", "Rust") == 0)
+/// }
+/// ```
+pub fn compare_names(a : String, b : String) -> Int32 {
   let common = if a.length() < b.length() { a.length() } else { b.length() }
   for i in 0..<common {
     let order = a[i].to_int() - b[i].to_int()

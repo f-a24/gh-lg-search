@@ -1,11 +1,46 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "f-a24/gh-lg-search/src/orbit"
 
+import {
+  "f-a24/gh-lg-search/src/domain",
+  "f-a24/gh-lg-search/src/layout",
+  "moonbitlang/core/debug",
+}
+
 // Values
+pub fn hit_test(Double, Double, Double, Array[Planet], Array[@layout.System], @layout.Canvas, Int32) -> Hit?
+
+pub fn planets(Array[@domain.Repo], Array[@layout.System], @layout.Canvas, Int32) -> Array[Planet]
+
+pub fn position(Planet, Array[@layout.System], Double) -> (Double, Double)
+
+pub fn visible_until(Int32, Array[Planet]) -> Array[Int32]
+
+pub fn year_at(Double, Int32, Int32) -> Int32
 
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
+pub(all) enum Hit {
+  Planet(Int32)
+  Star(Int32)
+}
+pub fn Hit::equal(Self, Self) -> Bool
+pub fn Hit::not_equal(Self, Self) -> Bool
+pub fn Hit::to_repr(Self) -> @debug.Repr
+
+#derive(Eq, @debug.Debug)
+pub(all) struct Planet {
+  repo : @domain.Repo
+  system_index : Int32
+  orbit_radius : Double
+  phase : Double
+  angular_speed : Double
+}
+pub fn Planet::equal(Self, Self) -> Bool
+pub fn Planet::not_equal(Self, Self) -> Bool
+pub fn Planet::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
