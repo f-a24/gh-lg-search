@@ -2,6 +2,9 @@
 package "f-a24/gh-lg-search/src/linguist"
 
 // Values
+pub fn color_of(String) -> String
+
+pub let default_color : String
 
 // Errors
 

@@ -5,3 +5,4 @@ target
 .mooncakes
 .repos
 dist
+src/domain/fixture_data_test.mbt

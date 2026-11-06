@@ -1,11 +1,65 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "f-a24/gh-lg-search/src/domain"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
+pub fn aggregate(Array[Repo]) -> Array[LanguageStat]
+
+pub fn filter_countable(Array[RawRepo]) -> Array[Repo]
+
+pub fn parse_created_year(String) -> Int32?
+
+pub fn year_range(Array[Repo]) -> (Int32, Int32)?
 
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
+pub(all) struct LanguageStat {
+  name : String
+  color : String
+  count : Int32
+}
+pub fn LanguageStat::equal(Self, Self) -> Bool
+pub fn LanguageStat::not_equal(Self, Self) -> Bool
+pub fn LanguageStat::to_repr(Self) -> @debug.Repr
+
+#derive(Eq, @debug.Debug)
+pub(all) struct Profile {
+  login : String
+  name : String?
+  avatar_url : String
+  bio : String?
+}
+pub fn Profile::equal(Self, Self) -> Bool
+pub fn Profile::not_equal(Self, Self) -> Bool
+pub fn Profile::to_repr(Self) -> @debug.Repr
+
+#derive(Eq, @debug.Debug)
+pub(all) struct RawRepo {
+  name : String
+  url : String
+  language : String?
+  fork : Bool
+  created_year : Int32
+}
+pub fn RawRepo::equal(Self, Self) -> Bool
+pub fn RawRepo::not_equal(Self, Self) -> Bool
+pub fn RawRepo::to_repr(Self) -> @debug.Repr
+
+#derive(Eq, @debug.Debug)
+pub(all) struct Repo {
+  name : String
+  url : String
+  language : String
+  created_year : Int32
+}
+pub fn Repo::equal(Self, Self) -> Bool
+pub fn Repo::not_equal(Self, Self) -> Bool
+pub fn Repo::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
