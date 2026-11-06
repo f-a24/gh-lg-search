@@ -1,11 +1,49 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "f-a24/gh-lg-search/src/layout"
 
+import {
+  "f-a24/gh-lg-search/src/domain",
+  "moonbitlang/core/debug",
+}
+
 // Values
+pub const ORBIT_ASPECT : Double = 0.45
+
+pub fn layout(Array[@domain.LanguageStat], Canvas, Int32) -> Array[System]
 
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
+pub(all) struct Canvas {
+  width : Double
+  height : Double
+}
+pub fn Canvas::equal(Self, Self) -> Bool
+pub fn Canvas::not_equal(Self, Self) -> Bool
+pub fn Canvas::scale(Self) -> Double
+pub fn Canvas::to_repr(Self) -> @debug.Repr
+
+type Random
+pub fn Random::new(Int32) -> Self
+pub fn Random::next_double(Self) -> Double
+
+#derive(Eq, @debug.Debug)
+pub(all) struct System {
+  language : String
+  color : String
+  x : Double
+  y : Double
+  star_radius : Double
+  orbit_step : Double
+  tilt : Double
+  extent : Double
+}
+pub fn System::equal(Self, Self) -> Bool
+pub fn System::label_baseline(Self, Canvas) -> Double
+pub fn System::label_width(Self, Canvas) -> Double
+pub fn System::not_equal(Self, Self) -> Bool
+pub fn System::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
