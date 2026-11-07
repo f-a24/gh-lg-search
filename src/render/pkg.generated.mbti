@@ -1,7 +1,14 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "f-a24/gh-lg-search/src/render"
 
+import {
+  "f-a24/gh-lg-search/src/ffi",
+  "f-a24/gh-lg-search/src/layout",
+  "f-a24/gh-lg-search/src/orbit",
+}
+
 // Values
+pub fn draw_frame(@ffi.Context2d, @layout.Canvas, Array[@layout.System], Array[@orbit.Planet], Double, Int32) -> Unit
 
 // Errors
 
