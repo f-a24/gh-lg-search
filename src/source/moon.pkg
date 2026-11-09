@@ -1,1 +1,31 @@
+import {
+  "f-a24/gh-lg-search/src/domain",
+  "f-a24/gh-lg-search/src/ffi",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "moonbitlang/core/string",
+}
 
+supported_targets = "js"
+
+rule(
+  name: "embed-repos-fixture",
+  command: ":embed -i $input -o $output --name f_a24_repos_json --text",
+)
+
+rule(
+  name: "embed-user-fixture",
+  command: ":embed -i $input -o $output --name f_a24_user_json --text",
+)
+
+dev_build(
+  rule: "embed-repos-fixture",
+  input: "../../fixtures/f-a24-repos.json",
+  output: "fixture_repos_wbtest.mbt",
+)
+
+dev_build(
+  rule: "embed-user-fixture",
+  input: "../../fixtures/f-a24-user.json",
+  output: "fixture_user_wbtest.mbt",
+)

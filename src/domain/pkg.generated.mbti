@@ -35,6 +35,7 @@ pub(all) struct Profile {
   name : String?
   avatar_url : String
   bio : String?
+  public_repos : Int32
 }
 pub fn Profile::equal(Self, Self) -> Bool
 pub fn Profile::not_equal(Self, Self) -> Bool

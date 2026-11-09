@@ -8,3 +8,5 @@ dist
 src/domain/fixture_data_test.mbt
 src/main/fixture_data.mbt
 src/orbit/fixture_data_test.mbt
+src/source/fixture_repos_wbtest.mbt
+src/source/fixture_user_wbtest.mbt

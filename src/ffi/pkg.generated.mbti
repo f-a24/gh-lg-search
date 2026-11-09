@@ -6,7 +6,11 @@ pub fn cancel_animation_frame(Int32) -> Unit
 
 pub fn device_pixel_ratio() -> Double
 
+pub fn encode_uri_component(String) -> String
+
 pub fn find_canvas(String) -> Canvas?
+
+pub async fn http_get_all(Array[String]) -> Array[HttpResponse]
 
 pub fn performance_now() -> Double
 
@@ -48,6 +52,13 @@ pub fn Context2d::translate(Self, Double, Double) -> Unit
 #external
 pub type Gradient
 pub fn Gradient::add_color_stop(Self, Double, String) -> Unit
+
+pub(all) struct HttpResponse {
+  status : Int32
+  ratelimit_remaining : String?
+  ratelimit_reset : String?
+  body : String
+}
 
 // Type aliases
 

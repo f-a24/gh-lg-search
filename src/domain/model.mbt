@@ -36,6 +36,7 @@ pub(all) struct Profile {
   name : String?
   avatar_url : String
   bio : String?
+  public_repos : Int32
 }
 
 ///|

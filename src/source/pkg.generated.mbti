@@ -1,9 +1,27 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "f-a24/gh-lg-search/src/source"
 
+import {
+  "f-a24/gh-lg-search/src/domain",
+  "moonbitlang/core/debug",
+}
+
 // Values
+pub async fn fetch_profile(String) -> @domain.Profile raise FetchError
+
+pub async fn fetch_repos(String, Int32) -> Array[@domain.Repo] raise FetchError
 
 // Errors
+#derive(Eq, @debug.Debug)
+pub(all) suberror FetchError {
+  NotFound
+  RateLimited(reset_epoch~ : Int32)
+  Network(String)
+  Decode(String)
+}
+pub fn FetchError::equal(Self, Self) -> Bool
+pub fn FetchError::not_equal(Self, Self) -> Bool
+pub fn FetchError::to_repr(Self) -> @debug.Repr
 
 // Types and methods
 
