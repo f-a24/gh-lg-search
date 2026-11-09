@@ -100,3 +100,18 @@ pub fn year_range(repos : Array[Repo]) -> (Int32, Int32)? {
   })
   Some(range)
 }
+
+///|
+/// `count` の `total` に対する割合（%）を、小数第1位に四捨五入した文字列で返す。
+///
+/// ```mbt check
+/// test {
+///   inspect(@domain.percent_text(27, 51), content="52.9")
+///   inspect(@domain.percent_text(1, 51), content="2.0")
+///   inspect(@domain.percent_text(51, 51), content="100.0")
+/// }
+/// ```
+pub fn percent_text(count : Int32, total : Int32) -> String {
+  let tenths = (count * 2000 + total) / (2 * total)
+  "\{tenths / 10}.\{tenths % 10}"
+}

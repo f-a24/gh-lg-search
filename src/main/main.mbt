@@ -14,7 +14,7 @@ async fn load(
 /// 描画中の惑星系を止めて手放す。
 fn release_stage(holder : Ref[Stage?]) -> Unit {
   if holder.val is Some(stage) {
-    stage.stop()
+    stage.release()
     holder.val = None
   }
 }

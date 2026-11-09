@@ -253,6 +253,20 @@ test "hit_test は判定の半径の外にある惑星を返さない" {
 }
 
 ///|
+test "hit_test の min_reach は判定の半径を広げる" {
+  let systems = [system("Rust", 100.0, 100.0, 10.0)]
+  let planets = [planet("a", 2020, 0, 40.0)]
+  let hit = (x : Double, y : Double) => {
+    @orbit.hit_test(x, y, 0.0, planets, systems, canvas(), 2020, min_reach=22.0)
+  }
+  assert_eq(hit(161.9, 100.0), Some(@orbit.Hit::Planet(0)))
+  assert_eq(hit(162.0, 100.0), None)
+  // 惑星から遠い場所では恒星にも広げた半径で届く
+  assert_eq(hit(100.0, 121.9), Some(@orbit.Hit::Star(0)))
+  assert_eq(hit(100.0, 122.0), None)
+}
+
+///|
 test "hit_test は時刻 t の位置で判定する" {
   let systems = [system("Rust", 100.0, 100.0, 10.0)]
   let planets = [planet("a", 2020, 0, 40.0)]

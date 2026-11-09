@@ -180,8 +180,7 @@ fn Failure::message(self : Failure, format_time : (Int32) -> String) -> String {
 }
 
 ///|
-/// 凡例の1項目の文字列。割合は小数第1位に四捨五入する。
+/// 凡例の1項目の文字列。
 fn legend_text(stat : @domain.LanguageStat, total : Int32) -> String {
-  let tenths = (stat.count * 2000 + total) / (2 * total)
-  "\{stat.name} \{stat.count}（\{tenths / 10}.\{tenths % 10}%）"
+  "\{stat.name} \{stat.count}（\{@domain.percent_text(stat.count, total)}%）"
 }

@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "f-a24/gh-lg-search/src/main"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
 
 // Errors
@@ -21,6 +25,9 @@ type Msg
 
 #derive(Eq)
 type Phase
+
+#derive(Eq, @debug.Debug)
+type Pointer
 
 #derive(Eq)
 type Shown

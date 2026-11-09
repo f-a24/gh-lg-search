@@ -10,7 +10,7 @@ import {
 // Values
 pub const PLAYBACK_SECONDS : Double = 10.0
 
-pub fn hit_test(Double, Double, Double, Array[Planet], Array[@layout.System], @layout.Canvas, Int32) -> Hit?
+pub fn hit_test(Double, Double, Double, Array[Planet], Array[@layout.System], @layout.Canvas, Int32, min_reach? : Double) -> Hit?
 
 pub fn planets(Array[@domain.Repo], Array[@layout.System], @layout.Canvas, Int32) -> Array[Planet]
 

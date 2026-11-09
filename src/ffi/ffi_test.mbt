@@ -39,9 +39,7 @@ extern "js" fn styles_of(ctx : @ffi.Context2d) -> String =
 
 ///|
 extern "js" fn canvas_size_of(ctx : @ffi.Context2d) -> String =
-  #|(c) => [
-  #|  c.canvas.width, c.canvas.height, c.canvas.style.width, c.canvas.style.height,
-  #|].join(' ')
+  #|(c) => `${c.canvas.width} ${c.canvas.height}`
 
 ///|
 /// `getElementById` などのブラウザの大域の API を偽物に差し替える。
@@ -129,7 +127,7 @@ test "放射グラデーション" {
 test "fit_canvas は画素数を dpr 倍にして変換行列を設定し直す" {
   let ctx = fake_context()
   ctx.fit_canvas(320.5, 200, 2)
-  inspect(canvas_size_of(ctx), content="641 400 320.5px 200px")
+  inspect(canvas_size_of(ctx), content="641 400")
   inspect(calls_of(ctx), content="setTransform(2,0,0,2,0,0)")
 }
 

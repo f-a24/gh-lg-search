@@ -118,6 +118,7 @@ fn planet_radius(s : Double, grow : Double) -> Double {
 /// 時計が `clock` のときの惑星系を1フレーム描く。
 ///
 /// 再生の状態から求めた年までに作成されたリポジトリの惑星だけを描く。
+/// `hover` があれば、その惑星や恒星のツールチップを重ねる。
 /// `ctx` の座標は CSS ピクセルで、`canvas` と同じ大きさになっている前提。
 pub fn draw_frame(
   ctx : @ffi.Context2d,
@@ -126,6 +127,7 @@ pub fn draw_frame(
   planets : Array[@orbit.Planet],
   playback : @orbit.Playback,
   clock : Double,
+  hover : @orbit.Hit?,
 ) -> Unit {
   let s = canvas.scale()
   let t = playback.time(clock)
@@ -163,4 +165,7 @@ pub fn draw_frame(
     STATUS_X * s,
     STATUS_Y * s,
   )
+  if hover is Some(hit) {
+    draw_hover(ctx, canvas, systems, planets, hit, t)
+  }
 }

@@ -170,6 +170,7 @@ pub fn year_at(
 /// 座標 `(x, y)` にある惑星または恒星を返す。何もなければ `None`。
 ///
 /// 惑星を優先し、`visible_year` までに作成された惑星のうち最も近いものを選ぶ。
+/// `min_reach`（px）は判定の半径の下限で、小さい画面のタッチ操作に使う。
 pub fn hit_test(
   x : Double,
   y : Double,
@@ -178,9 +179,13 @@ pub fn hit_test(
   systems : Array[@layout.System],
   canvas : @layout.Canvas,
   visible_year : Int32,
+  min_reach~ : Double = 0.0,
 ) -> Hit? {
   let mut nearest = None
-  let mut nearest_distance = PLANET_HIT_RADIUS * canvas.scale()
+  let mut nearest_distance = @cmp.maximum(
+    PLANET_HIT_RADIUS * canvas.scale(),
+    min_reach,
+  )
   for index in visible_until(visible_year, planets) {
     let (planet_x, planet_y) = position(planets[index], systems, t)
     let distance = @math.hypot(planet_x - x, planet_y - y)
@@ -194,7 +199,7 @@ pub fn hit_test(
   }
   for index, system in systems {
     let distance = @math.hypot(system.x - x, system.y - y)
-    if distance < system.star_radius * STAR_HIT_SCALE {
+    if distance < @cmp.maximum(system.star_radius * STAR_HIT_SCALE, min_reach) {
       return Some(Hit::Star(index))
     }
   }

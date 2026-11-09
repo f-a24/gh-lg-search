@@ -16,6 +16,8 @@ pub fn format_time(Int32) -> String
 
 pub async fn http_get_all(Array[String]) -> Array[HttpResponse]
 
+pub fn open_new_tab(String) -> Unit
+
 pub fn performance_now() -> Double
 
 pub fn prefers_reduced_motion() -> Bool
@@ -33,6 +35,9 @@ pub fn set_query_param(String, String) -> Unit
 pub type Canvas
 pub fn Canvas::client_width(Self) -> Double
 pub fn Canvas::context_2d(Self) -> Context2d?
+pub fn Canvas::set_cursor(Self, String) -> Unit
+pub fn Canvas::watch_pointer(Self, (Double, Double) -> Unit, () -> Unit, (Double, Double, Bool) -> Unit) -> Subscription
+pub fn Canvas::watch_resize(Self, () -> Unit) -> Subscription
 
 #external
 pub type Context2d
@@ -47,6 +52,7 @@ pub fn Context2d::fit_canvas(Self, Double, Double, Double) -> Unit
 pub fn Context2d::measure_text(Self, String) -> Double
 pub fn Context2d::restore(Self) -> Unit
 pub fn Context2d::rotate(Self, Double) -> Unit
+pub fn Context2d::round_rect(Self, Double, Double, Double, Double, Double) -> Unit
 pub fn Context2d::save(Self) -> Unit
 pub fn Context2d::set_fill_color(Self, String) -> Unit
 pub fn Context2d::set_fill_gradient(Self, Gradient) -> Unit
@@ -54,6 +60,7 @@ pub fn Context2d::set_font(Self, String) -> Unit
 pub fn Context2d::set_line_width(Self, Double) -> Unit
 pub fn Context2d::set_stroke_color(Self, String) -> Unit
 pub fn Context2d::set_text_align(Self, String) -> Unit
+pub fn Context2d::set_text_baseline(Self, String) -> Unit
 pub fn Context2d::stroke(Self) -> Unit
 pub fn Context2d::translate(Self, Double, Double) -> Unit
 
@@ -67,6 +74,10 @@ pub(all) struct HttpResponse {
   ratelimit_reset : String?
   body : String
 }
+
+#external
+pub type Subscription
+pub fn Subscription::cancel(Self) -> Unit
 
 // Type aliases
 

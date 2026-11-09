@@ -56,7 +56,8 @@ pub fn Canvas::context_2d(self : Canvas) -> Context2d? {
 pub extern "js" fn Canvas::client_width(self : Canvas) -> Double = "(c) => c.clientWidth"
 
 ///|
-/// 表示サイズを CSS ピクセルで設定し、実際の画素数を `dpr` 倍にする。
+/// 表示サイズが `width` × `height`（CSS ピクセル）のキャンバスの、実際の画素数を
+/// `dpr` 倍にする。表示サイズそのものは CSS が決める。
 ///
 /// 以後の描画は CSS ピクセルの座標で行える。`canvas.width` を設定すると
 /// コンテキストの状態が初期化されるので、変換行列はここで設定し直す。
@@ -70,8 +71,6 @@ pub extern "js" fn Context2d::fit_canvas(
   #|  const canvas = ctx.canvas;
   #|  canvas.width = Math.round(width * dpr);
   #|  canvas.height = Math.round(height * dpr);
-  #|  canvas.style.width = `${width}px`;
-  #|  canvas.style.height = `${height}px`;
   #|  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   #|}
 
@@ -160,6 +159,21 @@ pub extern "js" fn Context2d::ellipse(
   #|  c.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
 
 ///|
+/// 角の丸い長方形をパスに足す。`roundRect` がないブラウザでは普通の長方形にする。
+pub extern "js" fn Context2d::round_rect(
+  self : Context2d,
+  x : Double,
+  y : Double,
+  width : Double,
+  height : Double,
+  radius : Double,
+) -> Unit =
+  #|(c, x, y, width, height, radius) => {
+  #|  if (c.roundRect) c.roundRect(x, y, width, height, radius);
+  #|  else c.rect(x, y, width, height);
+  #|}
+
+///|
 pub extern "js" fn Context2d::fill(self : Context2d) -> Unit = "(c) => c.fill()"
 
 ///|
@@ -197,6 +211,13 @@ pub extern "js" fn Context2d::set_text_align(
   self : Context2d,
   align : String,
 ) -> Unit = "(c, align) => { c.textAlign = align; }"
+
+///|
+/// 文字の基準線を設定する（`"middle"` / `"alphabetic"` など）。
+pub extern "js" fn Context2d::set_text_baseline(
+  self : Context2d,
+  baseline : String,
+) -> Unit = "(c, baseline) => { c.textBaseline = baseline; }"
 
 ///|
 pub extern "js" fn Context2d::fill_text(

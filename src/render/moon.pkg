@@ -1,7 +1,9 @@
 import {
+  "f-a24/gh-lg-search/src/domain",
   "f-a24/gh-lg-search/src/ffi",
   "f-a24/gh-lg-search/src/layout",
   "f-a24/gh-lg-search/src/orbit",
+  "moonbitlang/core/cmp",
   "moonbitlang/core/math",
 }
 
