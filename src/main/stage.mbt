@@ -65,6 +65,15 @@ fn Stage::mount(
 }
 
 ///|
+/// 予約中のフレームを取り消し、ループを止める。
+fn Stage::stop(self : Stage) -> Unit {
+  if self.frame is Some(id) {
+    @ffi.cancel_animation_frame(id)
+    self.frame = None
+  }
+}
+
+///|
 /// 時計が `clock` のときの1フレームを描き、年が変わっていれば知らせる。
 fn Stage::draw(self : Stage, clock : Double) -> Unit {
   @render.draw_frame(
@@ -102,9 +111,8 @@ fn Stage::apply(
   clock : Double,
 ) -> Unit {
   self.playback = playback
-  if !playback.is_running() && self.frame is Some(id) {
-    @ffi.cancel_animation_frame(id)
-    self.frame = None
+  if !playback.is_running() {
+    self.stop()
   }
   self.draw(clock)
   self.schedule()

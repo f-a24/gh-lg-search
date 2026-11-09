@@ -18,6 +18,27 @@ pub extern "js" fn performance_now() -> Double = "() => performance.now()"
 pub extern "js" fn device_pixel_ratio() -> Double = "() => globalThis.devicePixelRatio || 1"
 
 ///|
+/// URL のクエリ `name` の値を返す。ないときは空文字列。
+pub extern "js" fn query_param(name : String) -> String = "(name) => new URLSearchParams(location.search).get(name) ?? ''"
+
+///|
+/// 履歴を増やさずに、URL のクエリ `name` を `value` にする。パスはそのまま残す。
+pub extern "js" fn set_query_param(name : String, value : String) -> Unit =
+  #|(name, value) => {
+  #|  const url = new URL(location.href);
+  #|  url.searchParams.set(name, value);
+  #|  history.replaceState(history.state, '', url.href);
+  #|}
+
+///|
+/// 今の年（利用者のタイムゾーン）。
+pub extern "js" fn current_year() -> Int32 = "() => new Date().getFullYear()"
+
+///|
+/// UNIX 時刻（秒）を、利用者のタイムゾーンの `HH:MM:SS` にする。
+pub extern "js" fn format_time(epoch : Int32) -> String = "(epoch) => new Date(epoch * 1000).toLocaleTimeString('ja-JP')"
+
+///|
 /// 利用者が OS で「視差効果を減らす」を選んでいるとき `true`。
 pub extern "js" fn prefers_reduced_motion() -> Bool =
   #|() => matchMedia('(prefers-reduced-motion: reduce)').matches

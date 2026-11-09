@@ -9,7 +9,21 @@ package "f-a24/gh-lg-search/src/main"
 #derive(Eq)
 type Controls
 
+type Effect
+
+#derive(Eq)
+type Failure
+
+#derive(Eq)
+type Model
+
 type Msg
+
+#derive(Eq)
+type Phase
+
+#derive(Eq)
+type Shown
 
 type Stage
 

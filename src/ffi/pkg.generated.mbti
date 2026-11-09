@@ -4,11 +4,15 @@ package "f-a24/gh-lg-search/src/ffi"
 // Values
 pub fn cancel_animation_frame(Int32) -> Unit
 
+pub fn current_year() -> Int32
+
 pub fn device_pixel_ratio() -> Double
 
 pub fn encode_uri_component(String) -> String
 
 pub fn find_canvas(String) -> Canvas?
+
+pub fn format_time(Int32) -> String
 
 pub async fn http_get_all(Array[String]) -> Array[HttpResponse]
 
@@ -16,7 +20,11 @@ pub fn performance_now() -> Double
 
 pub fn prefers_reduced_motion() -> Bool
 
+pub fn query_param(String) -> String
+
 pub fn request_animation_frame((Double) -> Unit) -> Int32
+
+pub fn set_query_param(String, String) -> Unit
 
 // Errors
 

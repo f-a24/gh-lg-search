@@ -176,3 +176,41 @@ test "prefers_reduced_motion" {
   install_fake_browser(false)
   assert_false(@ffi.prefers_reduced_motion())
 }
+
+///|
+/// `location` と `history` を偽物に差し替える。
+extern "js" fn install_fake_location(href : String) -> Unit =
+  #|(href) => {
+  #|  const url = new URL(href);
+  #|  globalThis.location = { href: url.href, search: url.search };
+  #|  globalThis.history = {
+  #|    state: null,
+  #|    replaceState(state, title, next) { globalThis.replacedUrl = next; },
+  #|  };
+  #|}
+
+///|
+extern "js" fn replaced_url() -> String = "() => globalThis.replacedUrl"
+
+///|
+test "query_param" {
+  install_fake_location("https://f-a24.github.io/gh-lg-search/?user=f-a24&x=1")
+  inspect(@ffi.query_param("user"), content="f-a24")
+  inspect(@ffi.query_param("missing"), content="")
+}
+
+///|
+test "set_query_param はサブパスと他のクエリを残す" {
+  install_fake_location("https://f-a24.github.io/gh-lg-search/?x=1")
+  @ffi.set_query_param("user", "a b")
+  inspect(
+    replaced_url(),
+    content="https://f-a24.github.io/gh-lg-search/?x=1&user=a+b",
+  )
+}
+
+///|
+test "current_year と format_time" {
+  assert_true(@ffi.current_year() >= 2026)
+  assert_eq(@ffi.format_time(0).split(":").count(), 3)
+}

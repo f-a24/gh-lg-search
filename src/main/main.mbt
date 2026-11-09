@@ -1,137 +1,95 @@
 ///|
-using @html {button, canvas, div, input}
+using @rabbita {type Val}
 
 ///|
-using @rabbita {type Val, type Html}
-
-///|
-const CANVAS_ID : String = "planets"
-
-///|
-/// 再生の操作部の状態。キャンバスの描画は `Stage` が受け持つ。
-#derive(Eq)
-struct Controls {
-  first_year : Int32
-  last_year : Int32
-  year : Int32
-  playing : Bool
-  /// `prefers-reduced-motion` のとき `true`。再生できないようにする
-  still : Bool
+/// プロフィールと、集計の対象になるリポジトリを取得する。
+async fn load(
+  user : String,
+) -> (@domain.Profile, Array[@domain.Repo]) raise @source.FetchError {
+  let profile = @source.fetch_profile(user)
+  (profile, @source.fetch_repos(user, profile.public_repos))
 }
 
 ///|
-enum Msg {
-  TogglePlay
-  /// スライダーの値（年の文字列）
-  Seek(String)
-  /// 再生が進んで表示する年が変わった
-  YearChanged(Int32)
-}
-
-///|
-/// 再生の操作部の状態を更新する。スライダーの値が年でなければ `None`。
-fn Controls::update(self : Controls, msg : Msg) -> Controls? {
-  match msg {
-    TogglePlay => Some({ ..self, playing: !self.playing, })
-    Seek(value) =>
-      try @string.parse_int(value) catch {
-        _ => None
-      } noraise {
-        year => Some({ ..self, year, playing: false, })
-      }
-    YearChanged(year) => Some({ ..self, year, })
+/// 描画中の惑星系を止めて手放す。
+fn release_stage(holder : Ref[Stage?]) -> Unit {
+  if holder.val is Some(stage) {
+    stage.stop()
+    holder.val = None
   }
 }
 
 ///|
-/// 再生／一時停止のボタンと年スライダー。
-fn controls_view(controls : Controls, emit : @cmd.Emit[Msg]) -> Html {
-  let label = if controls.playing { "一時停止" } else { "再生" }
-  div(class="controls", [
-    button(
-      class="play",
-      type_="button",
-      title=label,
-      disabled=controls.still,
-      attrs=@html.Attrs::build().aria_label(label),
-      on_click=(emit.0)(TogglePlay),
-      if controls.playing {
-        "❚❚"
+/// 描画後に canvas を掴み、`repos` の惑星系の再生を始める。
+fn mount_cmd(
+  holder : Ref[Stage?],
+  repos : Array[@domain.Repo],
+  controls : Controls,
+  emit : @cmd.Emit[Msg],
+) -> @cmd.Cmd {
+  @cmd.custom_cmd(
+    scheduler => {
+      let { first_year, last_year, still, .. } = controls
+      let playback = if still {
+        @orbit.Playback::finished(first_year, last_year)
       } else {
-        "▶"
-      },
-    ),
-    input(
-      class="year",
-      input_type=Range,
-      min=controls.first_year,
-      max=controls.last_year,
-      step=1,
-      attrs=@html.Attrs::build()
-        .aria_label("表示する年")
-        .value_prop(controls.year.to_string()),
-      on_input=emit.map(value => Seek(value)),
-    ),
-  ])
+        @orbit.Playback::start(first_year, last_year, clock_now())
+      }
+      let on_year = year => scheduler.add((emit.0)(YearChanged(year)))
+      holder.val = Stage::mount(repos, playback, on_year)
+      if holder.val is Some(stage) {
+        stage.apply(playback, clock_now())
+      }
+    },
+    kind=@cmd.after_render,
+  )
 }
 
 ///|
-/// 惑星系を再生する画面。本物の画面は T4-2 で作る。
-fn app() -> Val[Html] {
-  let repos = try! fixture_repos()
-  guard @domain.year_range(repos) is Some((first_year, last_year)) else {
-    abort("fixture に対象のリポジトリがない")
-  }
-  let still = @ffi.prefers_reduced_motion()
-  let stage : Ref[Stage?] = Ref(None)
+/// `Model::update` が求めた副作用をコマンドにする。
+fn run_effect(
+  effect : Effect,
+  holder : Ref[Stage?],
+  emit : @cmd.Emit[Msg],
+) -> @cmd.Cmd {
   let with_stage = (action : (Stage) -> Unit) => {
-    @cmd.custom_cmd(_ => if stage.val is Some(stage) { action(stage) })
+    @cmd.custom_cmd(_ => if holder.val is Some(stage) { action(stage) })
   }
+  match effect {
+    NoEffect => @rabbita.none
+    StartSearch(user) =>
+      @cmd.batch([
+        @cmd.custom_cmd(_ => {
+          release_stage(holder)
+          @ffi.set_query_param("user", user)
+        }),
+        @cmd.attempt(result => (emit.0)(Fetched(result)), () => load(user)),
+      ])
+    MountStage(repos, controls) => mount_cmd(holder, repos, controls, emit)
+    ToggleStage => with_stage(stage => stage.toggle())
+    SeekStage(year) => with_stage(stage => stage.seek(year))
+  }
+}
+
+///|
+/// 画面全体。`?user=xxx` があれば開いてすぐ検索する。
+fn app() -> Val[Html] {
+  let holder : Ref[Stage?] = Ref(None)
   let (state, emit) = @rabbita.create_state_with_init(
     init=emit => {
-      let controls = {
-        first_year,
-        last_year,
-        year: if still {
-          last_year
-        } else {
-          first_year
-        },
-        playing: !still,
-        still,
-      }
-      let mount = @cmd.custom_cmd(
-        scheduler => {
-          let playback = if still {
-            @orbit.Playback::finished(first_year, last_year)
-          } else {
-            @orbit.Playback::start(first_year, last_year, clock_now())
-          }
-          let on_year = year => scheduler.add((emit.0)(YearChanged(year)))
-          stage.val = Stage::mount(repos, playback, on_year)
-          if stage.val is Some(stage) {
-            stage.apply(playback, clock_now())
-          }
-        },
-        kind=@cmd.after_render,
+      let (model, effect) = Model::initial(
+        @ffi.query_param("user"),
+        still=@ffi.prefers_reduced_motion(),
+        this_year=@ffi.current_year(),
       )
-      (controls, mount)
+      (model, run_effect(effect, holder, emit))
     },
-    update=(controls, msg, _) => {
-      guard controls.update(msg) is Some(updated) else {
-        return (controls, @rabbita.none)
-      }
-      let effect = match msg {
-        TogglePlay => with_stage(stage => stage.toggle())
-        Seek(_) => with_stage(stage => stage.seek(updated.year))
-        YearChanged(_) => @rabbita.none
-      }
-      (updated, effect)
+    update=(model, msg, emit) => {
+      let (updated, effect) = model.update(msg)
+      (updated, run_effect(effect, holder, emit))
     },
   )
-  state.view(controls => {
-    div(class="stage", [canvas(id=CANVAS_ID, ""), controls_view(controls, emit)])
-  })
+  state.view(model => view(model, emit))
 }
 
 ///|
