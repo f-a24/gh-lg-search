@@ -109,19 +109,27 @@ fn draw_star(ctx : @ffi.Context2d, system : @layout.System) -> Unit {
 }
 
 ///|
-/// 時刻 `t`（秒）の惑星系を1フレーム描く。
+/// 出現の倍率 `grow`（0〜1）のときの惑星の半径を返す。
+fn planet_radius(s : Double, grow : Double) -> Double {
+  PLANET_RADIUS * s * grow + PLANET_MIN_RADIUS
+}
+
+///|
+/// 時計が `clock` のときの惑星系を1フレーム描く。
 ///
-/// `year` までに作成されたリポジトリの惑星だけを描く。`ctx` の座標は
-/// CSS ピクセルで、`canvas` と同じ大きさになっている前提。
+/// 再生の状態から求めた年までに作成されたリポジトリの惑星だけを描く。
+/// `ctx` の座標は CSS ピクセルで、`canvas` と同じ大きさになっている前提。
 pub fn draw_frame(
   ctx : @ffi.Context2d,
   canvas : @layout.Canvas,
   systems : Array[@layout.System],
   planets : Array[@orbit.Planet],
-  t : Double,
-  year : Int32,
+  playback : @orbit.Playback,
+  clock : Double,
 ) -> Unit {
   let s = canvas.scale()
+  let t = playback.time(clock)
+  let year = playback.year(clock)
   ctx.set_fill_color(BACKGROUND)
   ctx.fill_rect(0.0, 0.0, canvas.width, canvas.height)
   // 軌道と惑星
@@ -132,7 +140,8 @@ pub fn draw_frame(
     draw_orbit(ctx, system, planet.orbit_radius)
     let (x, y) = @orbit.position(planet, systems, t)
     ctx.set_fill_color(system.color)
-    fill_circle(ctx, x, y, PLANET_RADIUS * s + PLANET_MIN_RADIUS)
+    let grow = playback.planet_scale(planet.repo.created_year, clock)
+    fill_circle(ctx, x, y, planet_radius(s, grow))
   }
   // 恒星
   for system in systems {

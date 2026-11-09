@@ -8,7 +8,7 @@ import {
 }
 
 // Values
-pub fn draw_frame(@ffi.Context2d, @layout.Canvas, Array[@layout.System], Array[@orbit.Planet], Double, Int32) -> Unit
+pub fn draw_frame(@ffi.Context2d, @layout.Canvas, Array[@layout.System], Array[@orbit.Planet], @orbit.Playback, Double) -> Unit
 
 // Errors
 

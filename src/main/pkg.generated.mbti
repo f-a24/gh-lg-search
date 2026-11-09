@@ -6,6 +6,12 @@ package "f-a24/gh-lg-search/src/main"
 // Errors
 
 // Types and methods
+#derive(Eq)
+type Controls
+
+type Msg
+
+type Stage
 
 // Type aliases
 

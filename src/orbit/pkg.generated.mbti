@@ -8,6 +8,8 @@ import {
 }
 
 // Values
+pub const PLAYBACK_SECONDS : Double = 10.0
+
 pub fn hit_test(Double, Double, Double, Array[Planet], Array[@layout.System], @layout.Canvas, Int32) -> Hit?
 
 pub fn planets(Array[@domain.Repo], Array[@layout.System], @layout.Canvas, Int32) -> Array[Planet]
@@ -41,6 +43,28 @@ pub(all) struct Planet {
 pub fn Planet::equal(Self, Self) -> Bool
 pub fn Planet::not_equal(Self, Self) -> Bool
 pub fn Planet::to_repr(Self) -> @debug.Repr
+
+#derive(Eq, @debug.Debug)
+pub struct Playback {
+  first_year : Int32
+  last_year : Int32
+  settled_year : Int32
+  origin_t : Double
+  origin_clock : Double
+  running : Bool
+}
+pub fn Playback::equal(Self, Self) -> Bool
+pub fn Playback::finished(Int32, Int32) -> Self
+pub fn Playback::is_running(Self) -> Bool
+pub fn Playback::not_equal(Self, Self) -> Bool
+pub fn Playback::pause(Self, Double) -> Self
+pub fn Playback::planet_scale(Self, Int32, Double) -> Double
+pub fn Playback::play(Self, Double) -> Self
+pub fn Playback::seek(Self, Int32, Double) -> Self
+pub fn Playback::start(Int32, Int32, Double) -> Self
+pub fn Playback::time(Self, Double) -> Double
+pub fn Playback::to_repr(Self) -> @debug.Repr
+pub fn Playback::year(Self, Double) -> Int32
 
 // Type aliases
 

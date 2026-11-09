@@ -5,6 +5,7 @@ body {
 }
 
 .stage {
+  position: relative;
   box-sizing: border-box;
   max-width: 960px;
   margin: 16px auto;
@@ -19,4 +20,46 @@ body {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.controls {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.play {
+  width: 32px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #262b3a;
+  border-radius: 6px;
+  background: rgba(11, 13, 20, .75);
+  color: #e7e9f0;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.play:hover:not(:disabled) {
+  border-color: #e7e9f0;
+}
+
+.play:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.play:focus-visible,
+.year:focus-visible {
+  outline: 2px solid #e7e9f0;
+  outline-offset: 2px;
+}
+
+.year {
+  width: clamp(96px, 22vw, 180px);
+  margin: 0;
+  accent-color: #e7e9f0;
 }
