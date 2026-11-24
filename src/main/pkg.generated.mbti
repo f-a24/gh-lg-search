@@ -10,9 +10,6 @@ import {
 // Errors
 
 // Types and methods
-#derive(Eq)
-type Controls
-
 type Effect
 
 #derive(Eq)
@@ -33,6 +30,9 @@ type Pointer
 type Shown
 
 type Stage
+
+#derive(Eq)
+type StageConfig
 
 // Type aliases
 

@@ -94,3 +94,13 @@ test "finished はすべての惑星が揃った状態で止まっている" {
   inspect(playback.year(123.0), content="2026")
   inspect(playback.planet_scale(2026, 123.0), content="1")
 }
+
+///|
+test "finished から play すると惑星が揃ったまま公転だけ進む" {
+  let playback = @orbit.Playback::finished(2017, 2026).play(100.0)
+  assert_true(playback.is_running())
+  inspect(playback.year(100.0), content="2026")
+  inspect(playback.planet_scale(2026, 100.0), content="1")
+  inspect(playback.time(100.0), content="10")
+  inspect(playback.time(103.0), content="13")
+}

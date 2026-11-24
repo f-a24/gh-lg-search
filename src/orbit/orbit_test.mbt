@@ -31,7 +31,7 @@ fn fixture_repos() -> Array[@domain.Repo] raise {
 
 ///|
 fn canvas() -> @layout.Canvas {
-  { width: 640.0, height: 400.0, }
+  { width: 640.0, height: 400.0, zoom: 1.0, }
 }
 
 ///|

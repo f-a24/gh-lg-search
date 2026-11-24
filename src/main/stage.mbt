@@ -20,8 +20,6 @@ struct Stage {
   element : @ffi.Canvas
   ctx : @ffi.Context2d
   repos : Array[@domain.Repo]
-  /// 表示する年が変わったときに呼ぶ
-  on_year : (Int32) -> Unit
   /// 手放すときに解除するイベントの監視
   subscriptions : Array[@ffi.Subscription]
   mut size : @layout.Canvas
@@ -31,7 +29,6 @@ struct Stage {
   mut pointer : Pointer
   /// カーソルが指の形になっているとき `true`
   mut pointing : Bool
-  mut shown_year : Int32
   mut frame : Int32?
 }
 
@@ -44,7 +41,11 @@ fn clock_now() -> Double {
 ///|
 /// 幅 `width` のキャンバスの大きさを返し、実際の画素数を合わせる。
 fn fit_canvas(ctx : @ffi.Context2d, width : Double) -> @layout.Canvas {
-  let size : @layout.Canvas = { width, height: width * CANVAS_ASPECT, }
+  let size : @layout.Canvas = {
+    width,
+    height: width * CANVAS_ASPECT,
+    zoom: 1.0,
+  }
   ctx.fit_canvas(
     size.width,
     size.height,
@@ -54,13 +55,16 @@ fn fit_canvas(ctx : @ffi.Context2d, width : Double) -> @layout.Canvas {
 }
 
 ///|
-/// 大きさ `size` のキャンバスに合わせて、恒星と惑星を配置する。
+/// 大きさ `size` のキャンバスに収まる最大の拡大率で、恒星と惑星を配置する。
+/// 戻り値の大きさには決まった拡大率が入っている。
 fn arrange(
   repos : Array[@domain.Repo],
   size : @layout.Canvas,
-) -> (Array[@layout.System], Array[@orbit.Planet]) {
-  let systems = @layout.layout(@domain.aggregate(repos), size, SEED)
-  (systems, @orbit.planets(repos, systems, size, SEED))
+) -> (@layout.Canvas, Array[@layout.System], Array[@orbit.Planet]) {
+  let stats = @domain.aggregate(repos)
+  let size = { ..size, zoom: @layout.fit_zoom(stats, size, SEED), }
+  let systems = @layout.layout(stats, size, SEED)
+  (size, systems, @orbit.planets(repos, systems, size, SEED))
 }
 
 ///|
@@ -69,17 +73,17 @@ fn arrange(
 fn Stage::mount(
   repos : Array[@domain.Repo],
   playback : @orbit.Playback,
-  on_year : (Int32) -> Unit,
 ) -> Stage? {
   guard @ffi.find_canvas(CANVAS_ID) is Some(element) else { return None }
   guard element.context_2d() is Some(ctx) else { return None }
-  let size = fit_canvas(ctx, element.client_width())
-  let (systems, planets) = arrange(repos, size)
+  let (size, systems, planets) = arrange(
+    repos,
+    fit_canvas(ctx, element.client_width()),
+  )
   let stage = {
     element,
     ctx,
     repos,
-    on_year,
     subscriptions: [],
     size,
     systems,
@@ -87,7 +91,6 @@ fn Stage::mount(
     playback,
     pointer: Away,
     pointing: false,
-    shown_year: playback.year(clock_now()),
     frame: None,
   }
   stage.subscriptions.push(
@@ -123,7 +126,7 @@ fn Stage::release(self : Stage) -> Unit {
 }
 
 ///|
-/// 時計が `clock` のときの1フレームを描き、年が変わっていれば知らせる。
+/// 時計が `clock` のときの1フレームを描く。
 fn Stage::draw(self : Stage, clock : Double) -> Unit {
   let year = self.playback.year(clock)
   let hover = self.pointer.target(
@@ -146,10 +149,6 @@ fn Stage::draw(self : Stage, clock : Double) -> Unit {
   if pointing != self.pointing {
     self.pointing = pointing
     self.element.set_cursor(if pointing { "pointer" } else { "" })
-  }
-  if year != self.shown_year {
-    self.shown_year = year
-    (self.on_year)(year)
   }
 }
 
@@ -178,25 +177,6 @@ fn Stage::apply(
   }
   self.draw(clock)
   self.schedule()
-}
-
-///|
-/// 再生中なら一時停止し、止まっていれば続きから再生する。
-fn Stage::toggle(self : Stage) -> Unit {
-  let clock = clock_now()
-  let playback = if self.playback.is_running() {
-    self.playback.pause(clock)
-  } else {
-    self.playback.play(clock)
-  }
-  self.apply(playback, clock)
-}
-
-///|
-/// `year` の始まりへ移動して止める。
-fn Stage::seek(self : Stage, year : Int32) -> Unit {
-  let clock = clock_now()
-  self.apply(self.playback.seek(year, clock), clock)
 }
 
 ///|
@@ -263,8 +243,10 @@ fn Stage::touch(self : Stage, x : Double, y : Double) -> Unit {
 fn Stage::refit(self : Stage) -> Unit {
   let width = self.element.client_width()
   guard width > 0.0 && width != self.size.width else { return }
-  let size = fit_canvas(self.ctx, width)
-  let (systems, planets) = arrange(self.repos, size)
+  let (size, systems, planets) = arrange(
+    self.repos,
+    fit_canvas(self.ctx, width),
+  )
   self.size = size
   self.systems = systems
   self.planets = planets

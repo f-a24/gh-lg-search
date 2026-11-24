@@ -9,6 +9,8 @@ import {
 // Values
 pub const ORBIT_ASPECT : Double = 0.45
 
+pub fn fit_zoom(Array[@domain.LanguageStat], Canvas, Int32) -> Double
+
 pub fn layout(Array[@domain.LanguageStat], Canvas, Int32) -> Array[System]
 
 // Errors
@@ -18,6 +20,7 @@ pub fn layout(Array[@domain.LanguageStat], Canvas, Int32) -> Array[System]
 pub(all) struct Canvas {
   width : Double
   height : Double
+  zoom : Double
 }
 pub fn Canvas::equal(Self, Self) -> Bool
 pub fn Canvas::not_equal(Self, Self) -> Bool

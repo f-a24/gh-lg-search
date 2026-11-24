@@ -20,23 +20,18 @@ fn release_stage(holder : Ref[Stage?]) -> Unit {
 }
 
 ///|
-/// 描画後に canvas を掴み、`repos` の惑星系の再生を始める。
+/// 描画後に canvas を掴み、すべての惑星が揃った `repos` の惑星系を表示する。
 fn mount_cmd(
   holder : Ref[Stage?],
   repos : Array[@domain.Repo],
-  controls : Controls,
-  emit : @cmd.Emit[Msg],
+  config : StageConfig,
 ) -> @cmd.Cmd {
   @cmd.custom_cmd(
-    scheduler => {
-      let { first_year, last_year, still, .. } = controls
-      let playback = if still {
-        @orbit.Playback::finished(first_year, last_year)
-      } else {
-        @orbit.Playback::start(first_year, last_year, clock_now())
-      }
-      let on_year = year => scheduler.add((emit.0)(YearChanged(year)))
-      holder.val = Stage::mount(repos, playback, on_year)
+    _ => {
+      let { first_year, last_year, still, } = config
+      let finished = @orbit.Playback::finished(first_year, last_year)
+      let playback = if still { finished } else { finished.play(clock_now()) }
+      holder.val = Stage::mount(repos, playback)
       if holder.val is Some(stage) {
         stage.apply(playback, clock_now())
       }
@@ -52,9 +47,6 @@ fn run_effect(
   holder : Ref[Stage?],
   emit : @cmd.Emit[Msg],
 ) -> @cmd.Cmd {
-  let with_stage = (action : (Stage) -> Unit) => {
-    @cmd.custom_cmd(_ => if holder.val is Some(stage) { action(stage) })
-  }
   match effect {
     NoEffect => @rabbita.none
     StartSearch(user) =>
@@ -65,9 +57,7 @@ fn run_effect(
         }),
         @cmd.attempt(result => (emit.0)(Fetched(result)), () => load(user)),
       ])
-    MountStage(repos, controls) => mount_cmd(holder, repos, controls, emit)
-    ToggleStage => with_stage(stage => stage.toggle())
-    SeekStage(year) => with_stage(stage => stage.seek(year))
+    MountStage(repos, config) => mount_cmd(holder, repos, config)
   }
 }
 

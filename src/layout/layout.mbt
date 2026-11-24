@@ -7,12 +7,12 @@ pub const ORBIT_ASPECT : Double = 0.45
 const BASE_WIDTH : Double = 640.0
 
 ///|
-/// 上端の予約領域の高さ（年表示の領域）。`s` 倍して使う。
+/// 上端の予約領域の高さ（件数表示の領域）。`s` 倍して使う。
 const TOP_RESERVED : Double = 34.0
 
 ///|
-/// 下端の予約領域の高さ（操作UIの領域）。`s` 倍して使う。
-const BOTTOM_RESERVED : Double = 46.0
+/// 下端の予約領域の高さ。`s` 倍して使う。
+const BOTTOM_RESERVED : Double = 12.0
 
 ///|
 /// 恒星の下端から言語名のベースラインまでの距離。`s` 倍して使う。
@@ -23,8 +23,8 @@ const LABEL_OFFSET : Double = 14.0
 const LABEL_DESCENT : Double = 3.0
 
 ///|
-/// 等幅フォント 10.5px の1文字の幅（0.6em）。`s` 倍して使う。
-const LABEL_CHAR_WIDTH : Double = 6.3
+/// 等幅フォント 9px の1文字の幅（0.6em）。`s` 倍して使う。
+const LABEL_CHAR_WIDTH : Double = 5.4
 
 ///|
 /// 恒星の表面から最も内側の軌道までの距離。`s` 倍して使う。
@@ -68,6 +68,8 @@ const GRID_ROWS : Int32 = 24
 pub(all) struct Canvas {
   width : Double
   height : Double
+  /// 惑星系全体の拡大率。`fit_zoom` で決める
+  zoom : Double
 }
 
 ///|
@@ -101,12 +103,12 @@ pub extend System with Eq::{equal, not_equal}
 ///
 /// ```mbt check
 /// test {
-///   let canvas : @layout.Canvas = { width: 320.0, height: 200.0, }
+///   let canvas : @layout.Canvas = { width: 320.0, height: 200.0, zoom: 1.0, }
 ///   inspect(canvas.scale(), content="0.5")
 /// }
 /// ```
 pub fn Canvas::scale(self : Canvas) -> Double {
-  self.width / BASE_WIDTH
+  self.width / BASE_WIDTH * self.zoom
 }
 
 ///|
@@ -145,8 +147,8 @@ fn new_system(
   let s = canvas.scale()
   let star_radius = (3.0 + stat.count.to_double().sqrt() * 2.6) * s
   let gaps = @cmp.maximum(1, stat.count - 1).to_double()
-  // 件数が多い言語は軌道の間隔を詰めて、惑星系がキャンバスの 30% を超えないようにする
-  let room = @cmp.minimum(canvas.width, canvas.height) * 0.3 -
+  // 件数が多い言語は軌道の間隔を詰めて、惑星系がキャンバスの 35% を超えないようにする
+  let room = @cmp.minimum(canvas.width, canvas.height) * 0.35 -
     star_radius -
     FIRST_ORBIT_GAP * s
   let orbit_step = @cmp.minimum(
@@ -275,4 +277,46 @@ pub fn layout(
     placed.push(systems[index])
   }
   systems
+}
+
+///|
+/// 惑星系の外縁がキャンバスの中に収まっていれば `true`。
+fn System::fits(self : System, canvas : Canvas) -> Bool {
+  self.x - self.extent * 0.9 >= 0.0 &&
+  self.x + self.extent * 0.9 <= canvas.width &&
+  self.y - self.extent * 0.5 >= 0.0 &&
+  self.y + self.extent * 0.5 <= canvas.height
+}
+
+///|
+/// どの惑星系の外縁も重なっていなければ `true`。
+fn no_overlap(systems : Array[System]) -> Bool {
+  for i, a in systems {
+    for b in systems[i + 1:] {
+      let distance = @math.hypot(a.x - b.x, (a.y - b.y) / ORBIT_ASPECT)
+      if distance < a.extent + b.extent {
+        return false
+      }
+    }
+  }
+  true
+}
+
+///|
+/// 惑星系が重ならず、キャンバスに収まる最大の拡大率を返す。どれも収まらなければ 1 を返す。
+///
+/// 言語が少ないほど大きく描ける。同じ入力なら同じ結果になる。
+pub fn fit_zoom(
+  stats : Array[@domain.LanguageStat],
+  canvas : Canvas,
+  seed : Int32,
+) -> Double {
+  for zoom in [1.5, 1.4, 1.3, 1.2, 1.1] {
+    let zoomed = { ..canvas, zoom, }
+    let systems = layout(stats, zoomed, seed)
+    if no_overlap(systems) && systems.iter().all(system => system.fits(zoomed)) {
+      return zoom
+    }
+  }
+  1.0
 }

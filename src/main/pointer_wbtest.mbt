@@ -1,5 +1,5 @@
 ///|
-let pointer_size : @layout.Canvas = { width: 640.0, height: 400.0, }
+let pointer_size : @layout.Canvas = { width: 640.0, height: 400.0, zoom: 1.0, }
 
 ///|
 let pointer_systems : Array[@layout.System] = [

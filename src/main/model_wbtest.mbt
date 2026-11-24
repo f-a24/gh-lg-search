@@ -23,17 +23,16 @@ fn loading() -> Model {
 }
 
 ///|
-/// 2020 年と 2024 年のリポジトリを読み込み終えた状態。
-fn showing(still~ : Bool = false) -> Model {
+/// 2020 年と 2024 年のリポジトリを読み込み終えたときの表示の設定。
+fn config_of(still~ : Bool = false) -> StageConfig {
   let model = { ..start(still~), query: "a", phase: Loading("a"), }
   let repos = [repo("x", "Rust", 2020), repo("y", "Elm", 2024)]
-  model.update(Fetched(Ok((sample_profile, repos)))).0
-}
-
-///|
-fn controls_of(model : Model) -> Controls {
-  guard model.phase is Showing(shown) else { abort("表示中ではない") }
-  shown.controls
+  let (shown, effect) = model.update(Fetched(Ok((sample_profile, repos))))
+  guard shown.phase is Showing(_) else { abort("表示中ではない") }
+  guard effect is MountStage(_, config) else {
+    abort("描画が始まらない")
+  }
+  config
 }
 
 ///|
@@ -67,24 +66,16 @@ test "取得中はもう一度検索できない" {
 }
 
 ///|
-test "取得に成功すると最も古い年から今の年まで再生する" {
-  let (model, effect) = loading().update(
-    Fetched(Ok((sample_profile, [repo("x", "Rust", 2020)]))),
-  )
-  assert_true(effect is MountStage(_, _))
-  let controls = controls_of(model)
-  assert_eq(controls.first_year, 2020)
-  assert_eq(controls.last_year, 2026)
-  assert_eq(controls.year, 2020)
-  assert_true(controls.playing)
+test "取得に成功すると最も古い年から今の年までを表示する" {
+  let config = config_of()
+  assert_eq(config.first_year, 2020)
+  assert_eq(config.last_year, 2026)
+  assert_false(config.still)
 }
 
 ///|
-test "視差効果を減らす設定では最後の年で止めて表示する" {
-  let controls = controls_of(showing(still=true))
-  assert_eq(controls.year, 2026)
-  assert_false(controls.playing)
-  assert_true(controls.still)
+test "視差効果を減らす設定では静止画にする" {
+  assert_true(config_of(still=true).still)
 }
 
 ///|
@@ -99,33 +90,6 @@ test "取得に失敗すると検索したユーザーの失敗になり、も�
   let (model, _) = loading().update(Fetched(Err(NotFound)))
   assert_true(model.phase == Failed(FetchFailed(user="a", NotFound)))
   assert_true(model.update(Submit).1 is StartSearch("a"))
-}
-
-///|
-test "再生の操作" {
-  let model = showing()
-  let (paused, effect) = model.update(TogglePlay)
-  assert_false(controls_of(paused).playing)
-  assert_true(effect is ToggleStage)
-  let (moved, effect) = model.update(Seek("2022"))
-  assert_eq(controls_of(moved).year, 2022)
-  assert_false(controls_of(moved).playing)
-  assert_true(effect is SeekStage(2022))
-  let (advanced, effect) = model.update(YearChanged(2021))
-  assert_eq(controls_of(advanced).year, 2021)
-  assert_true(controls_of(advanced).playing)
-  assert_true(effect is NoEffect)
-  let (same, effect) = model.update(Seek("abc"))
-  assert_true(same == model)
-  assert_true(effect is NoEffect)
-}
-
-///|
-test "表示中でないときの再生のメッセージは無視する" {
-  let model = loading()
-  assert_true(model.update(YearChanged(2021)).0 == model)
-  assert_true(model.update(TogglePlay).1 is NoEffect)
-  assert_true(model.update(Seek("2021")).1 is NoEffect)
 }
 
 ///|
@@ -154,15 +118,4 @@ test "エラーの文言" {
     NoRepos.message(format_time),
     content="言語が判定された公開リポジトリがありません",
   )
-}
-
-///|
-test "凡例の文字列" {
-  fn stat(count : Int32) -> @domain.LanguageStat {
-    { name: "TypeScript", color: "#3178c6", count, }
-  }
-
-  inspect(legend_text(stat(27), 51), content="TypeScript 27（52.9%）")
-  inspect(legend_text(stat(1), 51), content="TypeScript 1（2.0%）")
-  inspect(legend_text(stat(51), 51), content="TypeScript 51（100.0%）")
 }

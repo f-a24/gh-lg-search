@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "warren-dev",
+      "runtimeExecutable": "warren",
+      "runtimeArgs": ["dev", "--browser-entry", "src/main"],
+      "port": 4300
+    }
+  ]
+}

@@ -39,7 +39,7 @@ fn zipf_stats(top_count : Int32) -> Array[@domain.LanguageStat] {
 ///|
 /// 16:10 のキャンバスを幅から作る。
 fn canvas_of(width : Double) -> @layout.Canvas {
-  { width, height: width * 10.0 / 16.0, }
+  { width, height: width * 10.0 / 16.0, zoom: 1.0, }
 }
 
 ///|
@@ -50,7 +50,7 @@ fn assert_inside(
 ) -> Unit raise {
   let s = canvas.scale()
   let top = 34.0 * s
-  let bottom = canvas.height - 46.0 * s
+  let bottom = canvas.height - 12.0 * s
   for system in systems {
     let half_label = system.label_width(canvas) / 2.0
     let half_width = @cmp.maximum(system.star_radius, half_label)
@@ -165,6 +165,37 @@ test "シードが変わると傾きが変わる" {
     @layout.layout(stats, canvas, 1)[0].tilt !=
     @layout.layout(stats, canvas, 2)[0].tilt,
   )
+}
+
+///|
+test "fit_zoom の結果で配置すると重ならず、キャンバスに収まる" {
+  for stats in [f_a24_stats(), single_repo_stats(25), zipf_stats(60)] {
+    for width in [375.0, 640.0, 1280.0] {
+      let canvas = canvas_of(width)
+      let zoom = @layout.fit_zoom(stats, canvas, 11)
+      assert_true(zoom >= 1.0 && zoom <= 1.5)
+      let zoomed = { ..canvas, zoom, }
+      let systems = @layout.layout(stats, zoomed, 11)
+      assert_no_overlap(systems)
+      assert_inside(systems, zoomed)
+    }
+  }
+}
+
+///|
+test "fit_zoom は言語が少ないほど大きくする" {
+  let canvas = canvas_of(640.0)
+  inspect(@layout.fit_zoom([stat("Rust", 3)], canvas, 11), content="1.5")
+  assert_true(
+    @layout.fit_zoom(single_repo_stats(3), canvas, 11) >=
+    @layout.fit_zoom(zipf_stats(80), canvas, 11),
+  )
+}
+
+///|
+test "fit_zoom は収まらないほど大きい惑星系を拡大しない" {
+  let canvas = canvas_of(640.0)
+  inspect(@layout.fit_zoom([stat("TypeScript", 500)], canvas, 11), content="1")
 }
 
 ///|

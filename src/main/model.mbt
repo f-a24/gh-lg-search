@@ -1,12 +1,10 @@
 ///|
-/// 再生の操作部の状態。キャンバスの描画は `Stage` が受け持つ。
+/// 惑星系の表示の設定。キャンバスの描画は `Stage` が受け持つ。
 #derive(Eq)
-struct Controls {
+struct StageConfig {
   first_year : Int32
   last_year : Int32
-  year : Int32
-  playing : Bool
-  /// `prefers-reduced-motion` のとき `true`。再生できないようにする
+  /// `prefers-reduced-motion` のとき `true`。公転させず静止画で表示する
   still : Bool
 }
 
@@ -23,8 +21,6 @@ enum Failure {
 #derive(Eq)
 struct Shown {
   profile : @domain.Profile
-  stats : Array[@domain.LanguageStat]
-  controls : Controls
 }
 
 ///|
@@ -46,7 +42,7 @@ struct Model {
   phase : Phase
   /// `prefers-reduced-motion` のとき `true`
   still : Bool
-  /// 今の年。再生の終わりの年に使う
+  /// 今の年。表示する最後の年に使う
   this_year : Int32
 }
 
@@ -55,11 +51,6 @@ enum Msg {
   QueryChanged(String)
   Submit
   Fetched(Result[(@domain.Profile, Array[@domain.Repo]), @source.FetchError])
-  TogglePlay
-  /// スライダーの値（年の文字列）
-  Seek(String)
-  /// 再生が進んで表示する年が変わった
-  YearChanged(Int32)
 }
 
 ///|
@@ -68,9 +59,7 @@ enum Effect {
   NoEffect
   /// 前の惑星系を止め、URL を更新して取得を始める
   StartSearch(String)
-  MountStage(Array[@domain.Repo], Controls)
-  ToggleStage
-  SeekStage(Int32)
+  MountStage(Array[@domain.Repo], StageConfig)
 }
 
 ///|
@@ -104,31 +93,8 @@ fn Model::show(
     return ({ ..self, phase: Failed(NoRepos), }, NoEffect)
   }
   let last_year = @cmp.maximum(newest_year, self.this_year)
-  let controls = {
-    first_year,
-    last_year,
-    year: if self.still {
-      last_year
-    } else {
-      first_year
-    },
-    playing: !self.still,
-    still: self.still,
-  }
-  let stats = @domain.aggregate(repos)
-  (
-    { ..self, phase: Showing({ profile, stats, controls, }), },
-    MountStage(repos, controls),
-  )
-}
-
-///|
-fn Model::with_controls(
-  self : Model,
-  shown : Shown,
-  controls : Controls,
-) -> Model {
-  { ..self, phase: Showing({ ..shown, controls, }), }
+  let config = { first_year, last_year, still: self.still, }
+  ({ ..self, phase: Showing({ profile, }), }, MountStage(repos, config))
 }
 
 ///|
@@ -142,23 +108,6 @@ fn Model::update(self : Model, msg : Msg) -> (Model, Effect) {
     (Fetched(Ok((profile, repos))), Loading(_)) => self.show(profile, repos)
     (Fetched(Err(error)), Loading(user)) =>
       ({ ..self, phase: Failed(FetchFailed(user~, error)), }, NoEffect)
-    (TogglePlay, Showing(shown)) => {
-      let controls = { ..shown.controls, playing: !shown.controls.playing, }
-      (self.with_controls(shown, controls), ToggleStage)
-    }
-    (Seek(value), Showing(shown)) =>
-      try @string.parse_int(value) catch {
-        _ => (self, NoEffect)
-      } noraise {
-        year => {
-          let controls = { ..shown.controls, year, playing: false, }
-          (self.with_controls(shown, controls), SeekStage(year))
-        }
-      }
-    (YearChanged(year), Showing(shown)) => {
-      let controls = { ..shown.controls, year, }
-      (self.with_controls(shown, controls), NoEffect)
-    }
     _ => (self, NoEffect)
   }
 }
@@ -177,10 +126,4 @@ fn Failure::message(self : Failure, format_time : (Int32) -> String) -> String {
     FetchFailed(user=_, Decode(_)) =>
       "GitHub の応答を解釈できませんでした。時間をおいてもう一度お試しください"
   }
-}
-
-///|
-/// 凡例の1項目の文字列。
-fn legend_text(stat : @domain.LanguageStat, total : Int32) -> String {
-  "\{stat.name} \{stat.count}（\{@domain.percent_text(stat.count, total)}%）"
 }

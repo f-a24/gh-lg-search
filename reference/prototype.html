@@ -1,0 +1,590 @@
+<title>言語比率スケッチ集</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* Layout: dark gallery wall — one wide canvas per sketch, notes beside it, stacked on phones */
+:root {
+  --bg: #0b0d14;
+  --panel: #131722;
+  --line: #262b3a;
+  --fg: #e7e9f0;
+  --muted: #8f95a8;
+  --accent: #ff4f8b;
+  --font-display: "Dela Gothic One", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-body: "IBM Plex Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+html { background: var(--bg); }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 56px; }
+header { display: grid; gap: 14px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; color: var(--accent); text-transform: uppercase; }
+h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 5vw, 46px); line-height: 1.2; margin: 0; text-wrap: balance; }
+.lead { color: var(--muted); max-width: 62ch; margin: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); font-family: var(--font-mono); font-size: 13px; }
+.legend .note { flex-basis: 100%; color: var(--muted); font-family: var(--font-body); font-size: 12px; }
+.legend span.item { display: inline-flex; align-items: center; gap: 7px; font-variant-numeric: tabular-nums; }
+.chip { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.switch { display: inline-flex; justify-self: start; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--panel); }
+.switch button { font: 500 13px var(--font-body); color: var(--muted); background: transparent; border: 0; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.switch button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+section.sketch { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 820px) { section.sketch { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
+.stage { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); aspect-ratio: 16 / 10; max-width: 100%; }
+.stage canvas { display: block; width: 100%; height: 100%; }
+.replay {
+  position: absolute; right: 10px; bottom: 10px;
+  font: 500 12px var(--font-mono); color: var(--fg);
+  background: rgba(19, 23, 34, .8); border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 12px; cursor: pointer;
+}
+.replay:hover { border-color: var(--accent); }
+.replay:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.notes { display: grid; gap: 12px; min-width: 0; }
+.tag { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .08em; }
+h2 { font-family: var(--font-display); font-weight: 400; font-size: 24px; line-height: 1.3; margin: 0; text-wrap: balance; }
+.notes p { margin: 0; color: var(--muted); }
+dl.map { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; font-size: 13px; padding-top: 10px; border-top: 1px solid var(--line); }
+dl.map dt { font-family: var(--font-mono); color: var(--muted); font-size: 12px; padding-top: 1px; }
+dl.map dd { margin: 0; }
+.fit { font-size: 13px; color: var(--muted); }
+.fit b { color: var(--fg); font-weight: 500; }
+footer { color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); padding-top: 18px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">gh-lg-search / visual sketches</div>
+    <h1>言語比率をどう見せるか、5つのスケッチ</h1>
+    <p class="lead">表現案A〜Eを、Canvasで動くプロトタイプにしました。初期表示は f-a24 の実データ（51リポジトリ・12言語）です。AとBでは、玉や惑星にカーソルを合わせるとリポジトリ名が出ます。各ステージ右下の「もう一度」で、アニメーションを最初から再生できます。</p>
+    <div class="switch" role="group" aria-label="表示するデータ">
+      <button type="button" id="set-real" data-set="real" aria-pressed="true">f-a24 の実データ</button>
+      <button type="button" id="set-sample" data-set="sample" aria-pressed="false">架空のサンプル</button>
+    </div>
+    <div class="legend" id="legend"></div>
+  </header>
+
+  <section class="sketch" data-demo="jar">
+    <div class="stage"><canvas></canvas><button class="replay" type="button">↻ もう一度</button></div>
+    <div class="notes">
+      <div class="tag">案 A</div>
+      <h2>落下する玉の瓶</h2>
+      <p>リポジトリ1つが玉1つ。作成年の古い順に落ちて積もり、色の地層で比率と変遷が同時に見えます。</p>
+      <dl class="map">
+        <dt>現在</dt><dd>玉の数＝リポジトリ数</dd>
+        <dt>バイト数</dt><dd>玉の大きさ</dd>
+        <dt>時系列</dt><dd>落下の順番と地層</dd>
+      </dl>
+      <div class="fit">相性：<b>Leptos</b>（rapier2dで物理演算）</div>
+    </div>
+  </section>
+
+  <section class="sketch" data-demo="planets">
+    <div class="stage"><canvas></canvas><button class="replay" type="button">↻ もう一度</button></div>
+    <div class="notes">
+      <div class="tag">案 B</div>
+      <h2>言語の惑星系</h2>
+      <p>言語が恒星、リポジトリはその周りを回る惑星です。年が進むごとに新しい惑星が生まれ、軌道に加わります。</p>
+      <dl class="map">
+        <dt>現在</dt><dd>惑星の数</dd>
+        <dt>バイト数</dt><dd>恒星の大きさ・明るさ</dd>
+        <dt>時系列</dt><dd>惑星が生まれるタイミング</dd>
+      </dl>
+      <div class="fit">相性：<b>MoonBit</b>（計算が単純で自作しやすい）</div>
+    </div>
+  </section>
+
+  <section class="sketch" data-demo="flow">
+    <div class="stage"><canvas></canvas><button class="replay" type="button">↻ もう一度</button></div>
+    <div class="notes">
+      <div class="tag">案 C</div>
+      <h2>フローフィールド</h2>
+      <p>ノイズの流れに大量の粒子を流し、色の割合を言語の比率に合わせます。正確な数値よりも、その人の「色合い」を一枚の絵として見せる表現です。</p>
+      <dl class="map">
+        <dt>現在</dt><dd>粒子の色の割合</dd>
+        <dt>バイト数</dt><dd>流れの太さ・粒子の量</dd>
+        <dt>時系列</dt><dd>縦軸を時間にとった流れ</dd>
+      </dl>
+      <div class="fit">相性：<b>Leptos + wgpu</b>（粒子数を増やすほど差が出る）</div>
+    </div>
+  </section>
+
+  <section class="sketch" data-demo="meta">
+    <div class="stage"><canvas></canvas><button class="replay" type="button">↻ もう一度</button></div>
+    <div class="notes">
+      <div class="tag">案 D</div>
+      <h2>メタボール</h2>
+      <p>言語ごとの液体の塊が、近づくと溶け合って色が混ざります。ピクセルごとの計算なので、本番ではシェーダーで描くのが向いています。</p>
+      <dl class="map">
+        <dt>現在</dt><dd>塊の大きさ</dd>
+        <dt>バイト数</dt><dd>塊の面積</dd>
+        <dt>時系列</dt><dd>塊が膨らんでいくアニメーション</dd>
+      </dl>
+      <div class="fit">相性：<b>Leptos + WGSL</b> / <b>MoonBit</b>（WASMでピクセル計算）</div>
+    </div>
+  </section>
+
+  <section class="sketch" data-demo="tree">
+    <div class="stage"><canvas></canvas><button class="replay" type="button">↻ もう一度</button></div>
+    <div class="notes">
+      <div class="tag">案 E</div>
+      <h2>成長する木</h2>
+      <p>年が進むごとに枝が伸び、リポジトリが葉として芽吹きます。古い年の葉は内側に、新しい年の葉は外側に付きます。</p>
+      <dl class="map">
+        <dt>現在</dt><dd>葉の数と色</dd>
+        <dt>バイト数</dt><dd>葉の大きさ</dd>
+        <dt>時系列</dt><dd>枝の伸びと葉が付く順番</dd>
+      </dl>
+      <div class="fit">相性：<b>Gleam + p5.js</b>（再帰をそのまま書ける）</div>
+    </div>
+  </section>
+
+  <footer>実データは GitHub REST API（/users/f-a24/repos）から2026年11月5日に取得しました。集計方法は現行の gh-lg-search と同じく、各リポジトリの主要言語を1件として数えています（フォークと言語なしは除外）。架空のサンプルは54リポジトリ・2016〜2026年作成です。色はGitHub Linguistの言語色で、各スケッチは素のCanvas 2Dで描いています。</footer>
+</div>
+
+<script>
+(() => {
+  const REAL={langs:[{"name": "TypeScript", "color": "#3178c6", "n": 27}, {"name": "JavaScript", "color": "#f1e05a", "n": 7}, {"name": "Jupyter Notebook", "color": "#DA5B0B", "n": 6}, {"name": "Haskell", "color": "#5e5086", "n": 2}, {"name": "Rust", "color": "#dea584", "n": 2}, {"name": "Elm", "color": "#60B5CC", "n": 1}, {"name": "Svelte", "color": "#ff3e00", "n": 1}, {"name": "Kotlin", "color": "#A97BFF", "n": 1}, {"name": "GLSL", "color": "#5686a5", "n": 1}, {"name": "Python", "color": "#3572A5", "n": 1}, {"name": "Swift", "color": "#F05138", "n": 1}, {"name": "CSS", "color": "#663399", "n": 1}],repos:[{"name": "trial-pages", "li": 11, "year": 2017}, {"name": "learn-ml", "li": 2, "year": 2018}, {"name": "less-color", "li": 0, "year": 2018}, {"name": "next-pwa-start", "li": 1, "year": 2018}, {"name": "react-todo-ts", "li": 0, "year": 2018}, {"name": "react-tutorial-hooks", "li": 0, "year": 2018}, {"name": "react-worker-sandbox", "li": 1, "year": 2018}, {"name": "redux-todo-ts", "li": 0, "year": 2018}, {"name": "snower", "li": 0, "year": 2018}, {"name": "SnowTrick", "li": 1, "year": 2018}, {"name": "three-sandbox", "li": 0, "year": 2018}, {"name": "typed-expo-app", "li": 0, "year": 2018}, {"name": "wasm-cpp-sandbox", "li": 1, "year": 2018}, {"name": "e2e-sample", "li": 1, "year": 2019}, {"name": "elm-sandbox", "li": 5, "year": 2019}, {"name": "express-ts-start", "li": 0, "year": 2019}, {"name": "gatsby-starter-netlify-cms", "li": 0, "year": 2019}, {"name": "KotlinFirstApp", "li": 7, "year": 2019}, {"name": "learn-pureWebGL", "li": 0, "year": 2019}, {"name": "lit-html-sandbox", "li": 1, "year": 2019}, {"name": "monaco-sample", "li": 1, "year": 2019}, {"name": "sekiro-generator", "li": 0, "year": 2019}, {"name": "server-canvas", "li": 0, "year": 2019}, {"name": "sockets", "li": 0, "year": 2019}, {"name": "SwiftFirstApp", "li": 10, "year": 2019}, {"name": "gh-lg-search", "li": 0, "year": 2020}, {"name": "graphics-ts", "li": 0, "year": 2020}, {"name": "html-to-next-pages", "li": 0, "year": 2020}, {"name": "nextjs-firebase-example", "li": 0, "year": 2020}, {"name": "python-sandbox", "li": 9, "year": 2020}, {"name": "tanitai", "li": 0, "year": 2020}, {"name": "deep-zero1", "li": 2, "year": 2021}, {"name": "deep-zero2", "li": 2, "year": 2021}, {"name": "deep-zero3", "li": 2, "year": 2021}, {"name": "gen-art-ts", "li": 0, "year": 2021}, {"name": "generative-p5-ts", "li": 0, "year": 2021}, {"name": "great-h-book", "li": 3, "year": 2021}, {"name": "js-book", "li": 0, "year": 2021}, {"name": "ml-at-work", "li": 2, "year": 2021}, {"name": "rustbook", "li": 4, "year": 2021}, {"name": "web-optimization-with-ml", "li": 2, "year": 2021}, {"name": "gen-art-with-math-ts", "li": 0, "year": 2022}, {"name": "getting-started-with-haskell", "li": 3, "year": 2022}, {"name": "learning-vdom", "li": 0, "year": 2022}, {"name": "math-algorithm-rust", "li": 4, "year": 2022}, {"name": "math-of-real-time-graphics", "li": 8, "year": 2022}, {"name": "type-challenges-memo", "li": 0, "year": 2022}, {"name": "webgl2-ts", "li": 0, "year": 2022}, {"name": "england-football-map", "li": 6, "year": 2026}, {"name": "ll-choose", "li": 0, "year": 2026}, {"name": "sketch-gallery", "li": 0, "year": 2026}]};
+  const SAMPLE_LANGS = [
+    { name: 'TypeScript', color: '#3178c6', n: 18, era: 2022.5 },
+    { name: 'JavaScript', color: '#f1e05a', n: 14, era: 2018.5 },
+    { name: 'Rust',       color: '#dea584', n: 6,  era: 2024.5 },
+    { name: 'Python',     color: '#3572A5', n: 5,  era: 2020 },
+    { name: 'HTML',       color: '#e34c26', n: 4,  era: 2017 },
+    { name: 'CSS',        color: '#663399', n: 3,  era: 2017 },
+    { name: 'Go',         color: '#00ADD8', n: 2,  era: 2021.5 },
+    { name: 'Shell',      color: '#89e051', n: 2,  era: 2020 },
+  ];
+  let LANGS, REPOS, TOTAL, Y0, Y1;
+  const BG = '#0b0d14';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function rng(seed) {
+    return () => {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  const hexRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+
+  function sampleData() {
+    const R0 = rng(7);
+    const repos = [];
+    SAMPLE_LANGS.forEach((l, li) => {
+      for (let i = 0; i < l.n; i++) {
+        const y = Math.max(2016, Math.min(2026, Math.round(l.era + (R0() * 4 - 2))));
+        repos.push({ li, year: y, k: R0() });
+      }
+    });
+    repos.sort((a, b) => a.year - b.year || a.k - b.k);
+    repos.forEach((r, i) => { r.name = `sample-repo-${String(i + 1).padStart(2, '0')}`; });
+    return { langs: SAMPLE_LANGS, repos, y0: 2016, y1: 2026,
+      note: n => `サンプルデータ：架空のアカウント、リポジトリ ${n} 件（フォークは除外）` };
+  }
+  function realData() {
+    return { langs: REAL.langs, repos: REAL.repos, y0: 2017, y1: 2026,
+      note: n => `f-a24 の公開リポジトリ：フォーク以外で言語が判定された ${n} 件（全53件、2026年11月5日取得）` };
+  }
+
+  const lg = document.getElementById('legend');
+  function applyData(key) {
+    const d = key === 'sample' ? sampleData() : realData();
+    LANGS = d.langs; REPOS = d.repos; TOTAL = REPOS.length; Y0 = d.y0; Y1 = d.y1;
+    lg.textContent = '';
+    LANGS.forEach(l => {
+      const s = document.createElement('span');
+      s.className = 'item';
+      s.innerHTML = `<i class="chip" style="background:${l.color}"></i>${l.name} ${l.n}（${(l.n / TOTAL * 100).toFixed(1)}%）`;
+      lg.appendChild(s);
+    });
+    const note = document.createElement('span');
+    note.className = 'note';
+    note.textContent = d.note(TOTAL);
+    lg.appendChild(note);
+  }
+  applyData('real');
+
+  function tip(ctx, s, w, x, y, text, color) {
+    ctx.font = `500 ${Math.round(11.5 * s)}px "IBM Plex Mono", monospace`;
+    const tw = ctx.measureText(text).width, ph = 22 * s, pw = tw + 16 * s;
+    let bx = Math.max(4, Math.min(w - pw - 4, x + 12 * s));
+    let by = y - ph - 10 * s; if (by < 4) by = y + 14 * s;
+    ctx.fillStyle = 'rgba(19,23,34,.94)'; ctx.strokeStyle = color; ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(bx, by, pw, ph, 6 * s); else ctx.rect(bx, by, pw, ph);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#e7e9f0'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(text, bx + 8 * s, by + ph / 2);
+    ctx.textBaseline = 'alphabetic';
+  }
+
+  function yearLabel(ctx, s, text) {
+    ctx.fillStyle = 'rgba(231,233,240,.85)';
+    ctx.font = `500 ${Math.round(13 * s)}px "IBM Plex Mono", monospace`;
+    ctx.textAlign = 'left';
+    ctx.fillText(text, 14 * s, 24 * s);
+  }
+
+  // ---------- A: jar ----------
+  function jar(ctx, w, h, s, ptr) {
+    const x0 = w * 0.32, x1 = w * 0.68, top = h * 0.16, bottom = h * 0.93;
+    const area = (x1 - x0) * (bottom - top);
+    const r = Math.sqrt(area * 0.42 / (TOTAL * Math.PI));
+    const balls = [];
+    const R = rng(3);
+    let frame = 0, idx = 0, year = Y0;
+    const g = 0.28 * s;
+    return () => {
+      frame++;
+      if (idx < REPOS.length && frame % 5 === 0) {
+        const rp = REPOS[idx++];
+        const x = (x0 + x1) / 2 + (R() - 0.5) * (x1 - x0 - 2 * r) * 0.8;
+        const y = top - r * 2;
+        balls.push({ x, y, px: x - (R() - 0.5) * 1.5, py: y, c: LANGS[rp.li].color, label: `${rp.name} · ${LANGS[rp.li].name} · ${rp.year}` });
+        year = rp.year;
+      }
+      for (const b of balls) {
+        const vx = (b.x - b.px) * 0.985, vy = (b.y - b.py) * 0.985;
+        b.px = b.x; b.py = b.y;
+        b.x += vx + (R() - 0.5) * 0.06 * s; b.y += vy + g;
+      }
+      for (let it = 0; it < 4; it++) {
+        for (let i = 0; i < balls.length; i++) {
+          const a = balls[i];
+          for (let j = i + 1; j < balls.length; j++) {
+            const b = balls[j];
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const d2 = dx * dx + dy * dy, min = r * 2;
+            if (d2 < min * min && d2 > 0.0001) {
+              const d = Math.sqrt(d2), p = (min - d) / d * 0.5;
+              a.x -= dx * p; a.y -= dy * p; b.x += dx * p; b.y += dy * p;
+            }
+          }
+          if (a.x < x0 + r) a.x = x0 + r;
+          if (a.x > x1 - r) a.x = x1 - r;
+          if (a.y > bottom - r) a.y = bottom - r;
+        }
+      }
+      ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
+      for (const b of balls) {
+        ctx.beginPath(); ctx.arc(b.x, b.y, r * 0.96, 0, Math.PI * 2);
+        ctx.fillStyle = b.c; ctx.fill();
+        ctx.beginPath(); ctx.arc(b.x - r * 0.3, b.y - r * 0.3, r * 0.28, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.fill();
+      }
+      ctx.strokeStyle = 'rgba(231,233,240,.55)'; ctx.lineWidth = 2 * s;
+      ctx.beginPath();
+      ctx.moveTo(x0 - 2 * s, top);
+      ctx.lineTo(x0 - 2 * s, bottom + 2 * s);
+      ctx.lineTo(x1 + 2 * s, bottom + 2 * s);
+      ctx.lineTo(x1 + 2 * s, top);
+      ctx.stroke();
+      yearLabel(ctx, s, `${year}  ·  ${balls.length}/${TOTAL} repos`);
+      const hit = balls.find(b => Math.hypot(b.x - ptr.x, b.y - ptr.y) < r);
+      if (hit) {
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(hit.x, hit.y, r, 0, Math.PI * 2); ctx.stroke();
+        tip(ctx, s, w, hit.x, hit.y, hit.label, hit.c);
+      }
+    };
+  }
+
+  // ---------- B: planets ----------
+  function planets(ctx, w, h, s, ptr) {
+    const R = rng(11);
+    const minWH = Math.min(w, h);
+    // each language system: star radius, orbit spacing (compressed for big languages), outer extent
+    const stars = LANGS.map(l => {
+      const r = (3 + Math.sqrt(l.n) * 2.6) * s;
+      const step = Math.min(3.1 * s, Math.max(1.3 * s, (minWH * 0.3 - r - 7 * s) / Math.max(1, l.n - 1)));
+      const ext = r + 7 * s + (l.n - 1) * step + 8 * s;
+      return { r, step, ext, c: l.color, name: l.name, n: l.n, rot: (R() - 0.5) * 0.7, count: 0 };
+    });
+    // greedy placement: biggest first, each new system goes where it is farthest from the others
+    const placed = [];
+    [...stars].sort((a, b) => b.ext - a.ext).forEach(st => {
+      let best = null, bestScore = -Infinity;
+      ctx.font = `500 ${Math.round(10.5 * s)}px "IBM Plex Mono", monospace`;
+      const half = Math.max(st.ext * 0.9, ctx.measureText(st.name).width / 2 + 8 * s);
+      const x0 = half, x1 = w - half;
+      const y0 = st.ext * 0.5 + 34 * s, y1 = h - st.ext * 0.5 - 46 * s;
+      for (let gy = 0; gy <= 24; gy++) for (let gx = 0; gx <= 36; gx++) {
+        const x = x0 + (x1 - x0) * gx / 36, y = y0 + (y1 - y0) * gy / 24;
+        let clear = Infinity;
+        for (const p of placed) clear = Math.min(clear, Math.hypot(x - p.x, (y - p.y) * 1.6) - (p.ext + st.ext) * 0.85);
+        const score = Math.min(clear, 34 * s) - 0.08 * Math.hypot(x - w * 0.42, (y - h * 0.52) * 1.4);
+        if (score > bestScore) { bestScore = score; best = { x, y }; }
+      }
+      st.x = best.x; st.y = best.y; placed.push(st);
+    });
+    const pl = REPOS.map(rp => {
+      const st = stars[rp.li];
+      const k = st.count++;
+      const orbit = st.r + 7 * s + k * st.step;
+      return { st, orbit, ph: R() * Math.PI * 2, sp: 0.9 / Math.sqrt(orbit / s), year: rp.year, born: -1,
+        label: `${rp.name} · ${st.name} · ${rp.year}` };
+    });
+    let t = 0;
+    const dur = 600; // frames for 10 years
+    return () => {
+      t++;
+      const yf = Y0 + Math.min(1, t / dur) * (Y1 - Y0 + 0.99);
+      const year = Math.floor(yf);
+      ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
+      for (const p of pl) {
+        if (p.year > year) continue;
+        if (p.born < 0) p.born = t;
+        const { st } = p;
+        ctx.save(); ctx.translate(st.x, st.y); ctx.rotate(st.rot);
+        ctx.strokeStyle = 'rgba(231,233,240,.12)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.ellipse(0, 0, p.orbit, p.orbit * 0.45, 0, 0, Math.PI * 2); ctx.stroke();
+        const a = p.ph + t * 0.02 * p.sp;
+        const grow = Math.min(1, (t - p.born) / 30);
+        const lx = Math.cos(a) * p.orbit, ly = Math.sin(a) * p.orbit * 0.45;
+        ctx.beginPath(); ctx.arc(lx, ly, 3 * s * grow + 0.3, 0, Math.PI * 2);
+        ctx.fillStyle = st.c; ctx.fill();
+        ctx.restore();
+        p.sx = st.x + lx * Math.cos(st.rot) - ly * Math.sin(st.rot);
+        p.sy = st.y + lx * Math.sin(st.rot) + ly * Math.cos(st.rot);
+        p.vis = true;
+      }
+      for (const st of stars) {
+        const gr = ctx.createRadialGradient(st.x, st.y, 0, st.x, st.y, st.r * 2.6);
+        gr.addColorStop(0, st.c); gr.addColorStop(0.38, st.c + 'aa'); gr.addColorStop(1, st.c + '00');
+        ctx.fillStyle = gr;
+        ctx.beginPath(); ctx.arc(st.x, st.y, st.r * 2.6, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(st.x, st.y, st.r * 0.55, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.fill();
+      }
+      ctx.font = `500 ${Math.round(10.5 * s)}px "IBM Plex Mono", monospace`;
+      ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(231,233,240,.6)';
+      stars.forEach(st => ctx.fillText(st.name, st.x, st.y + st.r + 14 * s));
+      yearLabel(ctx, s, `${year}  ·  ${pl.filter(p => p.vis).length}/${TOTAL} repos`);
+      let hp = null, hd = 9 * s;
+      for (const p of pl) {
+        if (!p.vis) continue;
+        const d = Math.hypot(p.sx - ptr.x, p.sy - ptr.y);
+        if (d < hd) { hd = d; hp = p; }
+      }
+      if (hp) {
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(hp.sx, hp.sy, 5 * s, 0, Math.PI * 2); ctx.stroke();
+        tip(ctx, s, w, hp.sx, hp.sy, hp.label, hp.st.c);
+      } else {
+        const hs = stars.find(st => Math.hypot(st.x - ptr.x, st.y - ptr.y) < st.r * 1.3);
+        if (hs) tip(ctx, s, w, hs.x, hs.y, `${hs.name} · ${hs.n} repos（${(hs.n / TOTAL * 100).toFixed(1)}%）`, hs.c);
+      }
+    };
+  }
+
+  // ---------- C: flow field ----------
+  function flow(ctx, w, h, s) {
+    const R = rng(5);
+    const pick = () => {
+      let v = R() * TOTAL;
+      for (const l of LANGS) { if ((v -= l.n) < 0) return l.color; }
+      return LANGS[0].color;
+    };
+    const N = Math.round(1400 * (w * h) / (640 * 400));
+    const ps = Array.from({ length: N }, () => ({ x: R() * w, y: R() * h, c: pick(), life: R() * 200 }));
+    let t = 0;
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
+    const f = 0.0045 / s;
+    return () => {
+      t += 0.004;
+      ctx.fillStyle = 'rgba(11,13,20,0.045)'; ctx.fillRect(0, 0, w, h);
+      ctx.lineWidth = 1.1 * s; ctx.globalAlpha = 0.7;
+      for (const p of ps) {
+        const a = (Math.sin(p.x * f + t) + Math.cos(p.y * f * 1.3 - t * 0.7) + Math.sin((p.x + p.y) * f * 0.6 + t * 0.4)) * 1.4;
+        const nx = p.x + Math.cos(a) * 1.4 * s, ny = p.y + Math.sin(a) * 1.4 * s;
+        ctx.strokeStyle = p.c;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny); ctx.stroke();
+        p.x = nx; p.y = ny; p.life--;
+        if (p.life < 0 || p.x < 0 || p.x > w || p.y < 0 || p.y > h) {
+          p.x = R() * w; p.y = R() * h; p.life = 120 + R() * 200;
+        }
+      }
+      ctx.globalAlpha = 1;
+    };
+  }
+
+  // ---------- D: metaballs ----------
+  function meta(ctx, w, h, s) {
+    const cell = 4;
+    const gw = Math.ceil(w / cell), gh = Math.ceil(h / cell);
+    const off = document.createElement('canvas'); off.width = gw; off.height = gh;
+    const octx = off.getContext('2d');
+    const img = octx.createImageData(gw, gh);
+    const R = rng(9);
+    const bg = hexRgb(BG);
+    const blobs = [];
+    LANGS.forEach(l => {
+      const parts = l.n >= 10 ? 3 : l.n >= 4 ? 2 : 1;
+      for (let i = 0; i < parts; i++) {
+        blobs.push({
+          rgb: hexRgb(l.color), r: Math.sqrt(l.n / parts) * 5.2 * s / cell * 3.4,
+          cx: (0.3 + R() * 0.4) * gw, cy: (0.3 + R() * 0.4) * gh,
+          ax: (0.1 + R() * 0.2) * gw, ay: (0.1 + R() * 0.22) * gh,
+          fx: 0.4 + R() * 0.8, fy: 0.4 + R() * 0.8, ph: R() * 6.28,
+        });
+      }
+    });
+    let t = 0;
+    return () => {
+      t += 0.012;
+      for (const b of blobs) {
+        b.x = b.cx + Math.sin(t * b.fx + b.ph) * b.ax;
+        b.y = b.cy + Math.cos(t * b.fy + b.ph * 1.7) * b.ay;
+      }
+      const d = img.data;
+      for (let y = 0; y < gh; y++) {
+        for (let x = 0; x < gw; x++) {
+          let sum = 0, r = 0, g = 0, bl = 0;
+          for (const b of blobs) {
+            const dx = x - b.x, dy = y - b.y;
+            const v = b.r * b.r / (dx * dx + dy * dy + 1);
+            sum += v; r += v * b.rgb[0]; g += v * b.rgb[1]; bl += v * b.rgb[2];
+          }
+          let a = Math.min(1, Math.max(0, (sum - 0.85) / 0.25));
+          const rim = sum > 0.85 && sum < 1.05 ? 0.25 : 0;
+          const i = (y * gw + x) * 4;
+          const cr = r / sum, cg = g / sum, cb = bl / sum;
+          d[i]     = bg[0] * (1 - a) + Math.min(255, cr + 255 * rim) * a;
+          d[i + 1] = bg[1] * (1 - a) + Math.min(255, cg + 255 * rim) * a;
+          d[i + 2] = bg[2] * (1 - a) + Math.min(255, cb + 255 * rim) * a;
+          d[i + 3] = 255;
+        }
+      }
+      octx.putImageData(img, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(off, 0, 0, gw * cell, gh * cell);
+    };
+  }
+
+  // ---------- E: tree ----------
+  function tree(ctx, w, h, s) {
+    const R = rng(21);
+    const segs = [], tips = [];
+    const DEPTH = 7, STEP = 0.105;
+    function grow(x, y, ang, len, depth, t0) {
+      const dur = STEP * (0.8 + R() * 0.4);
+      const x2 = x + Math.cos(ang) * len, y2 = y + Math.sin(ang) * len;
+      segs.push({ x, y, x2, y2, t0, dur, wdt: Math.max(0.8, (DEPTH - depth + 1) * 1.25) * s });
+      if (depth === DEPTH) { tips.push({ x: x2, y: y2, t: t0 + dur, ang }); return; }
+      const spread = 0.32 + R() * 0.28;
+      grow(x2, y2, ang - spread + (R() - 0.5) * 0.15, len * (0.7 + R() * 0.1), depth + 1, t0 + dur);
+      grow(x2, y2, ang + spread + (R() - 0.5) * 0.15, len * (0.7 + R() * 0.1), depth + 1, t0 + dur);
+    }
+    grow(w / 2, h * 0.96, -Math.PI / 2, h * 0.2, 0, 0);
+    const tmax = Math.max(...tips.map(p => p.t));
+    tips.sort((a, b) => a.t - b.t || Math.hypot(a.x - w / 2, a.y - h * .45) - Math.hypot(b.x - w / 2, b.y - h * .45));
+    // map repos (oldest first) to tips (inner/earliest first)
+    const leaves = REPOS.map((rp, i) => {
+      const tp = tips[Math.floor(i * tips.length / REPOS.length)];
+      const yearT = (rp.year - Y0) / (Y1 - Y0);
+      return { ...tp, c: LANGS[rp.li].color, at: 0.25 + yearT * 0.75, rot: R() * Math.PI };
+    });
+    let frame = 0;
+    const dur = 540;
+    return () => {
+      frame++;
+      const p = Math.min(1, frame / dur);
+      const gp = Math.min(1, p / 0.75) * tmax; // branches finish at 75%
+      ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(231,233,240,.12)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(w * 0.2, h * 0.96); ctx.lineTo(w * 0.8, h * 0.96); ctx.stroke();
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#a99c8e';
+      for (const sg of segs) {
+        const q = Math.min(1, Math.max(0, (gp - sg.t0) / sg.dur));
+        if (q <= 0) continue;
+        ctx.lineWidth = sg.wdt;
+        ctx.beginPath(); ctx.moveTo(sg.x, sg.y);
+        ctx.lineTo(sg.x + (sg.x2 - sg.x) * q, sg.y + (sg.y2 - sg.y) * q); ctx.stroke();
+      }
+      for (const lf of leaves) {
+        const q = Math.min(1, Math.max(0, (p - lf.at) / 0.05));
+        if (q <= 0 || gp < lf.t) continue;
+        ctx.save(); ctx.translate(lf.x, lf.y); ctx.rotate(lf.ang + lf.rot * 0.3);
+        ctx.beginPath(); ctx.ellipse(0, 0, 6.5 * s * q, 3.6 * s * q, 0, 0, Math.PI * 2);
+        ctx.fillStyle = lf.c; ctx.fill();
+        ctx.restore();
+      }
+      const year = Math.min(Y1, Y0 + Math.floor(Math.max(0, (p - 0.25) / 0.75) * (Y1 - Y0 + 0.99)));
+      yearLabel(ctx, s, p < 0.25 ? '枝を伸ばしています' : `${year}`);
+    };
+  }
+
+  const DEMOS = { jar, planets, flow, meta, tree };
+  const restarts = [];
+
+  document.querySelectorAll('.switch button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.switch button').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      applyData(btn.dataset.set);
+      restarts.forEach(f => f());
+    });
+  });
+
+  document.querySelectorAll('section.sketch').forEach(sec => {
+    const canvas = sec.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+    const kind = sec.dataset.demo;
+    let tick = null, visible = false, raf = 0;
+    const ptr = { x: -1e9, y: -1e9 };
+    canvas.addEventListener('pointermove', e => {
+      const rc = canvas.getBoundingClientRect();
+      ptr.x = e.clientX - rc.left; ptr.y = e.clientY - rc.top;
+      if (reduced && tick) tick();
+    });
+    canvas.addEventListener('pointerleave', () => { ptr.x = ptr.y = -1e9; if (reduced && tick) tick(); });
+
+    function setup() {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width < 10) return;
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const s = rect.width / 640;
+      tick = DEMOS[kind](ctx, rect.width, rect.height, s, ptr);
+      if (reduced) { for (let i = 0; i < 700; i++) tick(); }
+      else tick();
+    }
+    function loop() {
+      if (!visible || reduced) { raf = 0; return; }
+      tick && tick();
+      raf = requestAnimationFrame(loop);
+    }
+    function start() { if (!raf && !reduced) raf = requestAnimationFrame(loop); }
+
+    new IntersectionObserver(es => {
+      visible = es[0].isIntersecting;
+      if (visible) start();
+    }, { threshold: 0.1 }).observe(canvas);
+
+    let rt;
+    new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(() => { setup(); start(); }, 120); }).observe(canvas);
+
+    sec.querySelector('.replay').addEventListener('click', () => { setup(); start(); });
+    restarts.push(() => { setup(); start(); });
+    setup();
+  });
+})();
+</script>

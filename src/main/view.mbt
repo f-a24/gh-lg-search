@@ -1,5 +1,5 @@
 ///|
-using @html {button, canvas, div, form, img, input, li, p, span, ul}
+using @html {button, canvas, div, form, img, input, p}
 
 ///|
 using @rabbita {type Html}
@@ -53,68 +53,15 @@ fn profile_view(profile : @domain.Profile) -> Html {
 }
 
 ///|
-/// 再生／一時停止のボタンと年スライダー。
-fn controls_view(controls : Controls, emit : @cmd.Emit[Msg]) -> Html {
-  let label = if controls.playing { "一時停止" } else { "再生" }
-  div(class="controls", [
-    button(
-      class="play",
-      type_="button",
-      title=label,
-      disabled=controls.still,
-      attrs=@html.Attrs::build().aria_label(label),
-      on_click=(emit.0)(TogglePlay),
-      if controls.playing {
-        "❚❚"
-      } else {
-        "▶"
-      },
-    ),
-    input(
-      class="year",
-      input_type=Range,
-      min=controls.first_year,
-      max=controls.last_year,
-      step=1,
-      attrs=@html.Attrs::build()
-        .aria_label("表示する年")
-        .value_prop(controls.year.to_string()),
-      on_input=emit.map(value => Seek(value)),
-    ),
-  ])
-}
-
-///|
-/// 言語ごとの件数と割合。Canvas の外の DOM に常に表示する。
-fn legend_view(stats : Array[@domain.LanguageStat]) -> Html {
-  let total = stats.fold(init=0, (sum, stat) => sum + stat.count)
-  ul(
-    class="legend",
-    [
-      for stat in stats => {
-        li([
-          span(class="dot", style=["background:\{stat.color}"], ""),
-          span(legend_text(stat, total)),
-        ])
-      }
-    ],
-  )
-}
-
-///|
-fn shown_view(shown : Shown, emit : @cmd.Emit[Msg]) -> Html {
+fn shown_view(shown : Shown) -> Html {
   div([
     profile_view(shown.profile),
-    div(class="stage", [
-      canvas(id=CANVAS_ID, ""),
-      controls_view(shown.controls, emit),
-    ]),
-    legend_view(shown.stats),
+    div(class="stage", [canvas(id=CANVAS_ID, "")]),
   ])
 }
 
 ///|
-fn phase_view(phase : Phase, emit : @cmd.Emit[Msg]) -> Html {
+fn phase_view(phase : Phase) -> Html {
   match phase {
     Idle => @html.nothing
     Loading(user) =>
@@ -129,11 +76,11 @@ fn phase_view(phase : Phase, emit : @cmd.Emit[Msg]) -> Html {
         attrs=@html.Attrs::build().role("alert"),
         failure.message(@ffi.format_time),
       )
-    Showing(shown) => shown_view(shown, emit)
+    Showing(shown) => shown_view(shown)
   }
 }
 
 ///|
 fn view(model : Model, emit : @cmd.Emit[Msg]) -> Html {
-  div(class="page", [search_view(model, emit), phase_view(model.phase, emit)])
+  div(class="page", [search_view(model, emit), phase_view(model.phase)])
 }

@@ -2,7 +2,7 @@
 const BACKGROUND : String = "#0b0d14"
 
 ///|
-const ORBIT_COLOR : String = "rgba(231,233,240,.12)"
+const ORBIT_COLOR : String = "rgba(231,233,240,.2)"
 
 ///|
 const STAR_CORE_COLOR : String = "rgba(255,255,255,.75)"
@@ -31,19 +31,19 @@ const CORE_RATIO : Double = 0.55
 
 ///|
 /// 言語名の文字の大きさ（`s` 倍して使う）。
-const LABEL_FONT_SIZE : Double = 10.5
+const LABEL_FONT_SIZE : Double = 9.0
 
 ///|
-/// 年と件数の文字の大きさ（`s` 倍して使う）。
-const STATUS_FONT_SIZE : Double = 13.0
+/// 件数の文字の大きさ（`s` 倍して使う）。
+const STATUS_FONT_SIZE : Double = 10.0
 
 ///|
-/// 年と件数の左端の位置（`s` 倍して使う）。
+/// 件数の左端の位置（`s` 倍して使う）。
 const STATUS_X : Double = 14.0
 
 ///|
-/// 年と件数のベースラインの位置（`s` 倍して使う）。
-const STATUS_Y : Double = 24.0
+/// 件数のベースラインの位置（`s` 倍して使う）。
+const STATUS_Y : Double = 20.0
 
 ///|
 /// 大きさ `size` を倍率 `s` で拡大した、Canvas の `font` の文字列を返す。
@@ -53,9 +53,9 @@ fn font(size : Double, s : Double) -> String {
 }
 
 ///|
-/// 左上に表示する年と件数の文字列を返す。
-fn status_text(year : Int32, shown : Int32, total : Int32) -> String {
-  "\{year}  ·  \{shown}/\{total} repos"
+/// 左上に表示する、今見えているリポジトリの件数の文字列を返す。
+fn status_text(shown : Int32) -> String {
+  "\{shown} repos"
 }
 
 ///|
@@ -156,15 +156,11 @@ pub fn draw_frame(
   for system in systems {
     ctx.fill_text(system.language, system.x, system.label_baseline(canvas))
   }
-  // 年と件数
+  // 件数
   ctx.set_font(font(STATUS_FONT_SIZE, s))
   ctx.set_text_align("left")
   ctx.set_fill_color(STATUS_COLOR)
-  ctx.fill_text(
-    status_text(year, visible.length(), planets.length()),
-    STATUS_X * s,
-    STATUS_Y * s,
-  )
+  ctx.fill_text(status_text(visible.length()), STATUS_X * s, STATUS_Y * s)
   if hover is Some(hit) {
     draw_hover(ctx, canvas, systems, planets, hit, t)
   }
