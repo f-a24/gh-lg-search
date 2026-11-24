@@ -119,3 +119,23 @@ test "エラーの文言" {
     content="言語が判定された公開リポジトリがありません",
   )
 }
+
+///|
+test "キャンバスの代替テキストに言語ごとの件数と割合が入る" {
+  let stats : Array[@domain.LanguageStat] = [
+    { name: "Rust", color: "#dea584", count: 2, },
+    { name: "Elm", color: "#60b5cc", count: 1, },
+  ]
+  inspect(
+    language_summary("a", stats),
+    content="a の言語構成（3 repos）: Rust 2 repos（66.7%）、Elm 1 repos（33.3%）",
+  )
+}
+
+///|
+test "表示中の状態は集計結果を持つ" {
+  let repos = [repo("x", "Rust", 2020), repo("y", "Elm", 2024)]
+  let (shown, _) = loading().update(Fetched(Ok((sample_profile, repos))))
+  guard shown.phase is Showing(shown) else { abort("表示中ではない") }
+  inspect(shown.stats.map(stat => stat.name).join(","), content="Elm,Rust")
+}

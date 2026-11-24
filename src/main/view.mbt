@@ -56,7 +56,15 @@ fn profile_view(profile : @domain.Profile) -> Html {
 fn shown_view(shown : Shown) -> Html {
   div([
     profile_view(shown.profile),
-    div(class="stage", [canvas(id=CANVAS_ID, "")]),
+    div(class="stage", [
+      canvas(
+        id=CANVAS_ID,
+        attrs=@html.Attrs::build()
+          .role("img")
+          .aria_label(language_summary(shown.profile.login, shown.stats)),
+        "",
+      ),
+    ]),
   ])
 }
 

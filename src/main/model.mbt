@@ -21,6 +21,23 @@ enum Failure {
 #derive(Eq)
 struct Shown {
   profile : @domain.Profile
+  /// キャンバスの代替テキストに使う言語ごとの件数（件数の降順）
+  stats : Array[@domain.LanguageStat]
+}
+
+///|
+/// キャンバスの代替テキスト。画面読み上げでも言語構成がわかるようにする。
+/// 例: `a の言語構成（3 repos）: Rust 2 repos（66.7%）、Elm 1 repos（33.3%）`
+fn language_summary(
+  login : String,
+  stats : Array[@domain.LanguageStat],
+) -> String {
+  let total = stats.fold(init=0, (sum, stat) => sum + stat.count)
+  let items = stats.map(stat => {
+    let percent = @domain.percent_text(stat.count, total)
+    "\{stat.name} \{stat.count} repos（\{percent}%）"
+  })
+  "\{login} の言語構成（\{total} repos）: \{items.join("、")}"
 }
 
 ///|
@@ -94,7 +111,8 @@ fn Model::show(
   }
   let last_year = @cmp.maximum(newest_year, self.this_year)
   let config = { first_year, last_year, still: self.still, }
-  ({ ..self, phase: Showing({ profile, }), }, MountStage(repos, config))
+  let stats = @domain.aggregate(repos)
+  ({ ..self, phase: Showing({ profile, stats, }), }, MountStage(repos, config))
 }
 
 ///|
