@@ -86,7 +86,7 @@
 
 ## M5. 公開
 
-- [ ] **T5-1 GitHub Pages へのデプロイ**
+- [x] **T5-1 GitHub Pages へのデプロイ**
   - まずローカルで `warren build` を実行し、`dist/index.html` が `index.js` をどのパスで読み込んでいるか確認する
   - `spec/pages.workflow.yml` を `.github/workflows/pages.yml` に移動して完成させる
   - 人間に次の2つを依頼し、終わったと返事をもらってから push する:
