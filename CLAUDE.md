@@ -8,9 +8,8 @@ MoonBit + Rabbita で作り直す。公開先は GitHub Pages（静的ホステ�
 
 1. `spec/spec.md` — 何を作るか（機能・見た目・スコープ）
 2. `spec/architecture.md` — パッケージ構成、データモデル、純粋関数とFFIの境界
-3. `spec/tasks.md` — 実装タスク。**1回の作業では1タスクだけ進める**
-4. `spec/moonbit-notes.md` — MoonBit / Rabbita / Warren の調査メモ（2026-11時点）
-5. `reference/prototype.html` — 見た目と動きの正解。B（惑星系）のJS実装は `reference/prototype-planets.js`
+3. `spec/moonbit-notes.md` — MoonBit / Rabbita / Warren の調査メモ（2026-11時点）
+4. `reference/prototype.html` — 見た目と動きの正解。B（惑星系）のJS実装は `reference/prototype-planets.js`
 
 ## MoonBit について必ず守ること
 
@@ -46,9 +45,7 @@ moon fmt            # 引き渡し前に必ず
 ## 完了の定義（各タスク共通）
 
 - `moon check` が警告なしで通る / `moon test` が通る / `moon fmt` 済み
-- `spec/tasks.md` の該当タスクの「完了条件」をすべて満たす
 - 公開APIが変わった場合は `pkg.generated.mbti` の差分を確認してコミットに含める
-- タスクを終えたら `spec/tasks.md` のチェックボックスを更新する
 
 ## やらないこと
 

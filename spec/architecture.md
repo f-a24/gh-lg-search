@@ -69,7 +69,7 @@ pub fn aggregate(repos : Array[Repo]) -> Array[LanguageStat]
 ```
 
 除外（fork、language なし）は `source` のデコード時に行うか、`domain` に `filter_countable` を置いてテストする。
-**旧版と同じ集計結果になること**を `fixtures/f-a24-repos.json` で検証する（期待値は `spec/tasks.md` 参照）。
+**旧版と同じ集計結果になること**を `fixtures/f-a24-repos.json` で検証する（期待値は `src/domain/aggregate_test.mbt` の「f-a24 の fixture を集計する」）。
 
 ## layout
 
