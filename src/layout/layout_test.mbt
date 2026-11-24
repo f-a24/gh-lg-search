@@ -62,14 +62,15 @@ fn assert_inside(
       system.x + half_width <= canvas.width,
       msg="\{system.language} が右にはみ出す",
     )
+    let half_height = system.half_height(canvas)
     assert_true(
-      system.y - system.star_radius >= top,
+      // 範囲の端に置かれたときの丸め誤差を許容する
+      system.y - half_height >= top - 1.0e-9,
       msg="\{system.language} が上にはみ出す",
     )
     assert_true(
-      // 範囲の下端に置かれたときの丸め誤差を許容する
-      system.label_baseline(canvas) + 3.0 * s <= bottom + 1.0e-9,
-      msg="\{system.language} の言語名が下にはみ出す",
+      system.y + half_height <= bottom + 1.0e-9,
+      msg="\{system.language} が下にはみ出す",
     )
   }
 }
@@ -173,7 +174,7 @@ test "fit_zoom の結果で配置すると重ならず、キャンバスに収�
     for width in [375.0, 640.0, 1280.0] {
       let canvas = canvas_of(width)
       let zoom = @layout.fit_zoom(stats, canvas, 11)
-      assert_true(zoom >= 1.0 && zoom <= 1.5)
+      assert_true(zoom >= 0.3 && zoom <= 1.5)
       let zoomed = { ..canvas, zoom, }
       let systems = @layout.layout(stats, zoomed, 11)
       assert_no_overlap(systems)
@@ -193,9 +194,50 @@ test "fit_zoom は言語が少ないほど大きくする" {
 }
 
 ///|
-test "fit_zoom は収まらないほど大きい惑星系を拡大しない" {
+test "fit_zoom は 1 倍で収まらない惑星系を縮小する" {
   let canvas = canvas_of(640.0)
-  inspect(@layout.fit_zoom([stat("TypeScript", 500)], canvas, 11), content="1")
+  let stats = [stat("TypeScript", 500)]
+  let zoom = @layout.fit_zoom(stats, canvas, 11)
+  inspect(zoom, content="0.4")
+  let zoomed = { ..canvas, zoom, }
+  let systems = @layout.layout(stats, zoomed, 11)
+  assert_inside(systems, zoomed)
+}
+
+///|
+/// mizchi の実データ（2026-11 取得、fork と言語なしを除いた 425 件）の集計結果。
+/// 大きい惑星系が 4 つあり、1 倍では収まらない。
+fn mizchi_stats() -> Array[@domain.LanguageStat] {
+  [
+    stat("TypeScript", 149),
+    stat("JavaScript", 101),
+    stat("MoonBit", 89),
+    stat("CoffeeScript", 37),
+    stat("Rust", 13),
+    stat("HTML", 8),
+    stat("Shell", 5),
+    stat("C", 2),
+    stat("Elixir", 2),
+    stat("Lean", 2),
+    stat("Nix", 2),
+    stat("Python", 2),
+    stat("Svelte", 2),
+    ..Array::makei(11, i => stat("One\{i}", 1)),
+  ]
+}
+
+///|
+test "リポジトリが多くても縮小して重ならずに収まる" {
+  let stats = mizchi_stats()
+  for width in [375.0, 640.0, 1280.0] {
+    let canvas = canvas_of(width)
+    let zoom = @layout.fit_zoom(stats, canvas, 11)
+    assert_true(zoom < 1.0, msg="縮小していない")
+    let zoomed = { ..canvas, zoom, }
+    let systems = @layout.layout(stats, zoomed, 11)
+    assert_no_overlap(systems)
+    assert_inside(systems, zoomed)
+  }
 }
 
 ///|

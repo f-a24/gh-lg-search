@@ -1,7 +1,7 @@
 ///|
 test "font は大きさを倍率で拡大して整数に丸める" {
   inspect(
-    font(LABEL_FONT_SIZE, 1.0),
+    font(9.0, 1.0),
     content="500 9px \"IBM Plex Mono\", ui-monospace, monospace",
   )
   inspect(

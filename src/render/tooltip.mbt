@@ -5,10 +5,11 @@ const TIP_BACKGROUND : String = "rgba(19,23,34,.94)"
 const TIP_TEXT_COLOR : String = "#e7e9f0"
 
 ///|
-const TIP_FONT_SIZE : Double = 11.5
+/// ツールチップの文字の大きさ（px）。キャンバスの大きさによらず一定にする。
+const TIP_FONT_SIZE : Double = 13.0
 
 ///|
-const TIP_HEIGHT : Double = 22.0
+const TIP_HEIGHT : Double = 26.0
 
 ///|
 /// ツールチップの左右の余白（`s` 倍して使う）。
@@ -34,8 +35,8 @@ const TIP_GAP_BELOW : Double = 14.0
 const TIP_MARGIN : Double = 4.0
 
 ///|
-/// ツールチップの倍率の下限。スマートフォンの幅でも文字を読めるようにする。
-const TIP_MIN_SCALE : Double = 1.0
+/// ツールチップの倍率。キャンバスを広げても文字が大きくなりすぎないよう、常に等倍で描く。
+const TIP_SCALE : Double = 1.0
 
 ///|
 /// 強調する白い輪の半径（`s` 倍して使う）。
@@ -129,7 +130,7 @@ fn draw_tip(
   text : String,
   color : String,
 ) -> Unit {
-  let s = @cmp.maximum(canvas.scale(), TIP_MIN_SCALE)
+  let s = TIP_SCALE
   ctx.set_font(font(TIP_FONT_SIZE, s))
   let max_width = canvas.width - 2.0 * (TIP_MARGIN + TIP_PADDING * s)
   let shown = fit_text(text, max_width, candidate => ctx.measure_text(candidate))

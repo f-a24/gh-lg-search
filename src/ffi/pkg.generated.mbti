@@ -57,11 +57,13 @@ pub fn Context2d::save(Self) -> Unit
 pub fn Context2d::set_fill_color(Self, String) -> Unit
 pub fn Context2d::set_fill_gradient(Self, Gradient) -> Unit
 pub fn Context2d::set_font(Self, String) -> Unit
+pub fn Context2d::set_line_join(Self, String) -> Unit
 pub fn Context2d::set_line_width(Self, Double) -> Unit
 pub fn Context2d::set_stroke_color(Self, String) -> Unit
 pub fn Context2d::set_text_align(Self, String) -> Unit
 pub fn Context2d::set_text_baseline(Self, String) -> Unit
 pub fn Context2d::stroke(Self) -> Unit
+pub fn Context2d::stroke_text(Self, String, Double, Double) -> Unit
 pub fn Context2d::translate(Self, Double, Double) -> Unit
 
 #external

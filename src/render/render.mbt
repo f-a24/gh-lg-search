@@ -8,7 +8,15 @@ const ORBIT_COLOR : String = "rgba(231,233,240,.2)"
 const STAR_CORE_COLOR : String = "rgba(255,255,255,.75)"
 
 ///|
-const LABEL_COLOR : String = "rgba(231,233,240,.6)"
+const LABEL_COLOR : String = "rgba(231,233,240,.92)"
+
+///|
+/// 言語名の縁取りの色。恒星の明るい核の上でも文字を読めるようにする。
+const LABEL_OUTLINE_COLOR : String = "rgba(11,13,20,.8)"
+
+///|
+/// 言語名の縁取りの太さ（文字の大きさに対する比）。
+const LABEL_OUTLINE_RATIO : Double = 0.3
 
 ///|
 const STATUS_COLOR : String = "rgba(231,233,240,.85)"
@@ -28,10 +36,6 @@ const GLOW_RATIO : Double = 2.6
 ///|
 /// 恒星の半径に対する白い核の半径の比。
 const CORE_RATIO : Double = 0.55
-
-///|
-/// 言語名の文字の大きさ（`s` 倍して使う）。
-const LABEL_FONT_SIZE : Double = 9.0
 
 ///|
 /// 件数の文字の大きさ（`s` 倍して使う）。
@@ -149,13 +153,20 @@ pub fn draw_frame(
   for system in systems {
     draw_star(ctx, system)
   }
-  // 言語名
-  ctx.set_font(font(LABEL_FONT_SIZE, s))
+  // 言語名（恒星の中心に重ね、暗い縁取りで読みやすくする）
+  let label_size = canvas.label_font_size()
+  ctx.set_font(font(label_size, 1.0))
   ctx.set_text_align("center")
+  ctx.set_text_baseline("middle")
+  ctx.set_line_join("round")
+  ctx.set_line_width(label_size * LABEL_OUTLINE_RATIO)
+  ctx.set_stroke_color(LABEL_OUTLINE_COLOR)
   ctx.set_fill_color(LABEL_COLOR)
   for system in systems {
-    ctx.fill_text(system.language, system.x, system.label_baseline(canvas))
+    ctx.stroke_text(system.language, system.x, system.y)
+    ctx.fill_text(system.language, system.x, system.y)
   }
+  ctx.set_text_baseline("alphabetic")
   // 件数
   ctx.set_font(font(STATUS_FONT_SIZE, s))
   ctx.set_text_align("left")

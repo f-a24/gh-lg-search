@@ -15,16 +15,12 @@ const TOP_RESERVED : Double = 34.0
 const BOTTOM_RESERVED : Double = 12.0
 
 ///|
-/// 恒星の下端から言語名のベースラインまでの距離。`s` 倍して使う。
-const LABEL_OFFSET : Double = 14.0
+/// 言語名の文字の大きさ。`s` 倍して使う。
+const LABEL_FONT_SIZE : Double = 9.0
 
 ///|
-/// ベースラインより下にはみ出す文字の高さ。`s` 倍して使う。
-const LABEL_DESCENT : Double = 3.0
-
-///|
-/// 等幅フォント 9px の1文字の幅（0.6em）。`s` 倍して使う。
-const LABEL_CHAR_WIDTH : Double = 5.4
+/// 等幅フォントの1文字の幅（文字の大きさに対する比）。
+const LABEL_CHAR_RATIO : Double = 0.6
 
 ///|
 /// 恒星の表面から最も内側の軌道までの距離。`s` 倍して使う。
@@ -112,17 +108,32 @@ pub fn Canvas::scale(self : Canvas) -> Double {
 }
 
 ///|
-/// 言語名を描いたときの幅の見積もりを返す。
+/// 言語名の文字の大きさ（px）を返す。
 ///
-/// 配置は純粋関数なので Canvas の `measureText` を使わず、等幅フォントの字幅から計算する。
-pub fn System::label_width(self : System, canvas : Canvas) -> Double {
-  self.language.length().to_double() * LABEL_CHAR_WIDTH * canvas.scale()
+/// ```mbt check
+/// test {
+///   let canvas : @layout.Canvas = { width: 1280.0, height: 800.0, zoom: 1.0, }
+///   inspect(canvas.label_font_size(), content="18")
+/// }
+/// ```
+pub fn Canvas::label_font_size(self : Canvas) -> Double {
+  LABEL_FONT_SIZE * self.scale()
 }
 
 ///|
-/// 言語名のベースラインの y 座標を返す。
-pub fn System::label_baseline(self : System, canvas : Canvas) -> Double {
-  self.y + self.star_radius + LABEL_OFFSET * canvas.scale()
+/// 言語名を描いたときの幅の見積もりを返す。言語名は恒星の中心に重ねて描く。
+///
+/// 配置は純粋関数なので Canvas の `measureText` を使わず、等幅フォントの字幅から計算する。
+pub fn System::label_width(self : System, canvas : Canvas) -> Double {
+  self.language.length().to_double() *
+  LABEL_CHAR_RATIO *
+  canvas.label_font_size()
+}
+
+///|
+/// 恒星の中心から、恒星と言語名の上端（下端）までの距離を返す。
+pub fn System::half_height(self : System, canvas : Canvas) -> Double {
+  @cmp.maximum(self.star_radius, canvas.label_font_size() / 2.0)
 }
 
 ///|
@@ -147,8 +158,11 @@ fn new_system(
   let s = canvas.scale()
   let star_radius = (3.0 + stat.count.to_double().sqrt() * 2.6) * s
   let gaps = @cmp.maximum(1, stat.count - 1).to_double()
-  // 件数が多い言語は軌道の間隔を詰めて、惑星系がキャンバスの 35% を超えないようにする
-  let room = @cmp.minimum(canvas.width, canvas.height) * 0.35 -
+  // 件数が多い言語は軌道の間隔を詰めて、惑星系がキャンバスの 35% を超えないようにする。
+  // 縮小しているときは、この上限も同じ割合で縮める
+  let room = @cmp.minimum(canvas.width, canvas.height) *
+    0.35 *
+    @cmp.minimum(1.0, canvas.zoom) -
     star_radius -
     FIRST_ORBIT_GAP * s
   let orbit_step = @cmp.minimum(
@@ -211,14 +225,14 @@ fn choose_position(
     system.extent * 0.9,
     system.label_width(canvas) / 2.0 + EDGE_MARGIN * s,
   )
-  let below_center = @cmp.maximum(
+  let half_height = @cmp.maximum(
     system.extent * 0.5,
-    system.star_radius + (LABEL_OFFSET + LABEL_DESCENT) * s,
+    system.half_height(canvas),
   )
   let (left, right) = candidate_range(half_width, canvas.width - half_width)
   let (top, bottom) = candidate_range(
-    system.extent * 0.5 + TOP_RESERVED * s,
-    canvas.height - below_center - BOTTOM_RESERVED * s,
+    half_height + TOP_RESERVED * s,
+    canvas.height - half_height - BOTTOM_RESERVED * s,
   )
   let mut best = (left, top)
   let mut best_score = -@double.infinity
@@ -303,7 +317,14 @@ fn no_overlap(systems : Array[System]) -> Bool {
 }
 
 ///|
-/// 惑星系が重ならず、キャンバスに収まる最大の拡大率を返す。どれも収まらなければ 1 を返す。
+/// `fit_zoom` が試す拡大率。大きい順に 0.1 刻み。
+let zoom_steps : FixedArray[Double] = [
+  1.5, 1.4, 1.3, 1.2, 1.1, 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3,
+]
+
+///|
+/// 惑星系が重ならず、キャンバスに収まる最大の拡大率を返す。
+/// リポジトリが多くて 1 倍で収まらなければ縮小する。最小の 0.3 でも収まらなければ 0.3 を返す。
 ///
 /// 言語が少ないほど大きく描ける。同じ入力なら同じ結果になる。
 pub fn fit_zoom(
@@ -311,12 +332,12 @@ pub fn fit_zoom(
   canvas : Canvas,
   seed : Int32,
 ) -> Double {
-  for zoom in [1.5, 1.4, 1.3, 1.2, 1.1] {
+  for zoom in zoom_steps {
     let zoomed = { ..canvas, zoom, }
     let systems = layout(stats, zoomed, seed)
     if no_overlap(systems) && systems.iter().all(system => system.fits(zoomed)) {
       return zoom
     }
   }
-  1.0
+  zoom_steps[zoom_steps.length() - 1]
 }

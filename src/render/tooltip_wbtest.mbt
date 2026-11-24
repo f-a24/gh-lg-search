@@ -71,8 +71,8 @@ test "fit_text は収まらない文字列の末尾を削る" {
 ///|
 test "tip_box は対象の右上に置く" {
   let tip = tip_box(100.0, 100.0, 50.0, 640.0, 1.0)
-  assert_eq((tip.x, tip.y), (112.0, 68.0))
-  assert_eq((tip.width, tip.height), (66.0, 22.0))
+  assert_eq((tip.x, tip.y), (112.0, 64.0))
+  assert_eq((tip.width, tip.height), (66.0, 26.0))
 }
 
 ///|

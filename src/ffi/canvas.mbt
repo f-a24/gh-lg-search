@@ -228,6 +228,22 @@ pub extern "js" fn Context2d::fill_text(
 ) -> Unit = "(c, text, x, y) => c.fillText(text, x, y)"
 
 ///|
+/// 文字の輪郭を線で描く。文字の縁取りに使う。
+pub extern "js" fn Context2d::stroke_text(
+  self : Context2d,
+  text : String,
+  x : Double,
+  y : Double,
+) -> Unit = "(c, text, x, y) => c.strokeText(text, x, y)"
+
+///|
+/// 線の角の形（`"miter"` / `"round"` / `"bevel"`）を設定する。
+pub extern "js" fn Context2d::set_line_join(
+  self : Context2d,
+  join : String,
+) -> Unit = "(c, join) => { c.lineJoin = join; }"
+
+///|
 /// 現在のフォントで描いたときの文字列の幅を返す。
 pub extern "js" fn Context2d::measure_text(
   self : Context2d,
