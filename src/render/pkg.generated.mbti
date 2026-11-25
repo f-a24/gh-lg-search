@@ -8,6 +8,8 @@ import {
 }
 
 // Values
+pub fn draw_backdrop(@ffi.Context2d, Double, Double, Double) -> Unit
+
 pub fn draw_frame(@ffi.Context2d, @layout.Canvas, Array[@layout.System], Array[@orbit.Planet], @orbit.Playback, Double, @orbit.Hit?) -> Unit
 
 // Errors

@@ -67,12 +67,16 @@ fn app() -> Val[Html] {
   let holder : Ref[Stage?] = Ref(None)
   let (state, emit) = @rabbita.create_state_with_init(
     init=emit => {
+      let still = @ffi.prefers_reduced_motion()
       let (model, effect) = Model::initial(
         @ffi.query_param("user"),
-        still=@ffi.prefers_reduced_motion(),
+        still~,
         this_year=@ffi.current_year(),
       )
-      (model, run_effect(effect, holder, emit))
+      (
+        model,
+        @cmd.batch([backdrop_cmd(still), run_effect(effect, holder, emit)]),
+      )
     },
     update=(model, msg, emit) => {
       let (updated, effect) = model.update(msg)

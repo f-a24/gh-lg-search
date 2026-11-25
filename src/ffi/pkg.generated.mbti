@@ -33,6 +33,7 @@ pub fn set_query_param(String, String) -> Unit
 // Types and methods
 #external
 pub type Canvas
+pub fn Canvas::client_height(Self) -> Double
 pub fn Canvas::client_width(Self) -> Double
 pub fn Canvas::context_2d(Self) -> Context2d?
 pub fn Canvas::set_cursor(Self, String) -> Unit
@@ -43,6 +44,7 @@ pub fn Canvas::watch_resize(Self, () -> Unit) -> Subscription
 pub type Context2d
 pub fn Context2d::arc(Self, Double, Double, Double, Double, Double) -> Unit
 pub fn Context2d::begin_path(Self) -> Unit
+pub fn Context2d::clear_rect(Self, Double, Double, Double, Double) -> Unit
 pub fn Context2d::create_radial_gradient(Self, Double, Double, Double, Double, Double, Double) -> Gradient
 pub fn Context2d::ellipse(Self, Double, Double, Double, Double, Double, Double, Double) -> Unit
 pub fn Context2d::fill(Self) -> Unit
@@ -57,6 +59,7 @@ pub fn Context2d::save(Self) -> Unit
 pub fn Context2d::set_fill_color(Self, String) -> Unit
 pub fn Context2d::set_fill_gradient(Self, Gradient) -> Unit
 pub fn Context2d::set_font(Self, String) -> Unit
+pub fn Context2d::set_global_alpha(Self, Double) -> Unit
 pub fn Context2d::set_line_join(Self, String) -> Unit
 pub fn Context2d::set_line_width(Self, Double) -> Unit
 pub fn Context2d::set_stroke_color(Self, String) -> Unit

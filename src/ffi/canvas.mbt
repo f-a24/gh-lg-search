@@ -56,6 +56,10 @@ pub fn Canvas::context_2d(self : Canvas) -> Context2d? {
 pub extern "js" fn Canvas::client_width(self : Canvas) -> Double = "(c) => c.clientWidth"
 
 ///|
+/// キャンバスの表示上の高さ（CSS ピクセル）を返す。
+pub extern "js" fn Canvas::client_height(self : Canvas) -> Double = "(c) => c.clientHeight"
+
+///|
 /// 表示サイズが `width` × `height`（CSS ピクセル）のキャンバスの、実際の画素数を
 /// `dpr` 倍にする。表示サイズそのものは CSS が決める。
 ///
@@ -119,6 +123,13 @@ pub extern "js" fn Context2d::set_line_width(
 ) -> Unit = "(c, width) => { c.lineWidth = width; }"
 
 ///|
+/// これ以降に描くものの不透明度（0〜1）を設定する。
+pub extern "js" fn Context2d::set_global_alpha(
+  self : Context2d,
+  alpha : Double,
+) -> Unit = "(c, alpha) => { c.globalAlpha = alpha; }"
+
+///|
 pub extern "js" fn Context2d::fill_rect(
   self : Context2d,
   x : Double,
@@ -126,6 +137,16 @@ pub extern "js" fn Context2d::fill_rect(
   width : Double,
   height : Double,
 ) -> Unit = "(c, x, y, width, height) => c.fillRect(x, y, width, height)"
+
+///|
+/// 矩形の範囲を透明にする。
+pub extern "js" fn Context2d::clear_rect(
+  self : Context2d,
+  x : Double,
+  y : Double,
+  width : Double,
+  height : Double,
+) -> Unit = "(c, x, y, width, height) => c.clearRect(x, y, width, height)"
 
 ///|
 pub extern "js" fn Context2d::begin_path(self : Context2d) -> Unit = "(c) => c.beginPath()"

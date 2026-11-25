@@ -136,8 +136,8 @@ pub fn draw_frame(
   let s = canvas.scale()
   let t = playback.time(clock)
   let year = playback.year(clock)
-  ctx.set_fill_color(BACKGROUND)
-  ctx.fill_rect(0.0, 0.0, canvas.width, canvas.height)
+  // 背景は画面全体の背景用キャンバス（`draw_backdrop`）が描くので、ここでは透明にする
+  ctx.clear_rect(0.0, 0.0, canvas.width, canvas.height)
   // 軌道と惑星
   let visible = @orbit.visible_until(year, planets)
   for index in visible {

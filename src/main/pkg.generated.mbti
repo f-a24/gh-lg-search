@@ -10,6 +10,8 @@ import {
 // Errors
 
 // Types and methods
+type Backdrop
+
 type Effect
 
 #derive(Eq)

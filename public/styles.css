@@ -5,14 +5,22 @@ body {
   color: #e7e9f0;
 }
 
+/* 画面全体の宇宙の背景。ほかの要素の後ろに固定する */
+.space {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 惑星系の領域。枠は付けず、背景は透明にして宇宙の背景を透かす */
 .stage {
   position: relative;
   box-sizing: border-box;
   margin: 12px 0 0;
   overflow: hidden;
-  border: 1px solid #262b3a;
-  border-radius: 12px;
-  background: #0b0d14;
   aspect-ratio: 16 / 10;
 }
 

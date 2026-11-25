@@ -90,5 +90,15 @@ fn phase_view(phase : Phase) -> Html {
 
 ///|
 fn view(model : Model, emit : @cmd.Emit[Msg]) -> Html {
-  div(class="page", [search_view(model, emit), phase_view(model.phase)])
+  div(class="page", [
+    // 画面全体の宇宙の背景。中身は `Backdrop` が描く
+    canvas(
+      id=BACKDROP_ID,
+      class="space",
+      attrs=@html.Attrs::build().aria_hidden("true"),
+      "",
+    ),
+    search_view(model, emit),
+    phase_view(model.phase),
+  ])
 }
